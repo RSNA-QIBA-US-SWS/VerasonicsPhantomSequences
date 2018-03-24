@@ -17,9 +17,12 @@ All of the processing code is located in the `processing_code/` directory.
 `AnalyzeAllAcquisitions.m` is the main script that will process all of the
 Verasonics-generated data in the `CWD`.
 
-The analysis code will take about 10 minutes, and then the figure with group
-SWSs and phase velocities should appear.  Plus a lot of intermediate files will
-be generated.
+Test data can be downloaded from Duke Box:
+https://duke.box.com/s/6fcndor1s6i8x67ax54zlfmfdhbiq8m4 
+
+The analysis of these data will take about 10 minutes, and then the figure with
+group SWSs and phase velocities should appear.  Plus a lot of intermediate
+files will be generated.
 
 # LICENSE
 See `LICENSE.txt`.
