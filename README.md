@@ -26,7 +26,7 @@ See `LICENSE.txt`.
 
 # Contributors
 * David Bradway, Ph.D.
-* Derek Chen
+* Derek Chan
 * Yufeng Deng, Ph.D.
 * Mark Palmeri, M.D., Ph.D.
 * Ned Rouze, Ph.D.
