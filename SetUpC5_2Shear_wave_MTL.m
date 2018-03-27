@@ -7,7 +7,7 @@ filedir = '/edit/path/here';
 push_focus = 50; %mm
 push_Fnum = 1.5; % 
 pushCycle  = 900;
-ne = 105;
+ne = 205;
 nrefs = 5;
 pushAngleDegree = 0;
 
