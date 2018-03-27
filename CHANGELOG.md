@@ -6,3 +6,4 @@
 
 # v1.3a
 * change tracking time from 20 ms -> 40 ms for more robust dispersion analysis
+* change from Apache v2.0 to MIT license

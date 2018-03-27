@@ -1,3 +1,5 @@
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 # Verasonics Phantom Sequences
 Verasonics sequences that work with the C5-2 and upgraded backplane hardware
 for software versions >= 3.0.6.
