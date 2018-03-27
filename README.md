@@ -1,5 +1,4 @@
-Verasonics Phantom Sequences
-============================
+# Verasonics Phantom Sequences
 Verasonics sequences that work with the C5-2 and upgraded backplane hardware
 for software versions >= 3.0.6.
 
@@ -13,13 +12,25 @@ An overview of setting up and modifying Verasonics sequences, including the
 background for these specific sequences, can be found here:
 https://doi.org/10.1109/TUFFC.2016.2614944
 
-LICENSE
-=======
+# Processing Code
+All of the processing code is located in the `processing_code/` directory.
+`AnalyzeAllAcquisitions.m` is the main script that will process all of the
+Verasonics-generated data in the `CWD`.
+
+Test data can be downloaded from Duke Box:
+https://duke.box.com/s/6fcndor1s6i8x67ax54zlfmfdhbiq8m4 
+
+The analysis of these data will take about 10 minutes, and then the figure with
+group SWSs and phase velocities should appear.  Plus a lot of intermediate
+files will be generated.
+
+# LICENSE
 See `LICENSE.txt`.
 
-Contributors
-============
-* David Bradway
-* Yufeng Deng
-* Mark Palmeri
-* Matthew Urban
+# Contributors
+* David Bradway, Ph.D.
+* Derek Chan
+* Yufeng Deng, Ph.D.
+* Mark Palmeri, M.D., Ph.D.
+* Ned Rouze, Ph.D.
+* Matthew Urban, Ph.D.
