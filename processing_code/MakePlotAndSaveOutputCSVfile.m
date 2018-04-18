@@ -96,7 +96,7 @@ function errorFlag = MakePlotAndSaveOutputCSVfile(par)
     kr = 2*pi*freqsToAnalyzeHz./phVel_avg.*rmin;        % kr values to find min freq in plot
     
     fmax=max(freqsToAnalyzeHz);                         % max freq based on size of error bars
-    fbadidx = find(CIfactor*phVel_std>fracErrorBar*phVel_avg);
+    fbadidx = find(CIfactor*phVel_std>fracErrorBar*phVel_avg & kr>=krThreshold);
     if length(fbadidx)>0
         fmax=freqsToAnalyzeHz(min(fbadidx)-1);
     end
