@@ -37,10 +37,13 @@ function errorFlag = MakePlotAndSaveOutputCSVfile(par)
         clear S
     end
 
-    Vdisp_avg = nanmean(Vdisp);     % find avg,std gSWS results
-    Vdisp_std =  nanstd(Vdisp);
-    Vvel_avg  = nanmean(Vvel);
-    Vvel_std  =  nanstd(Vvel);
+%    Vdisp_avg = nanmean(Vdisp);     % find avg,std gSWS results
+%    Vdisp_std =  nanstd(Vdisp);
+%    Vvel_avg  = nanmean(Vvel);
+%    Vvel_std  =  nanstd(Vvel);
+
+    [Vdisp_avg,Vdisp_std] = MeanStdOmitBadPtsOneCase_gSWS_usingPositiveData(Vdisp,thFactor,maxSpeed);
+    [ Vvel_avg, Vvel_std] = MeanStdOmitBadPtsOneCase_gSWS_usingPositiveData( Vvel,thFactor,maxSpeed);
 
     [phVel_avg,phVel_std] = MeanStdOmitBadPtsOneCase_usingPositiveData(phVel,thFactor,maxSpeed);
 
@@ -102,6 +105,11 @@ function errorFlag = MakePlotAndSaveOutputCSVfile(par)
     end
 
     fidx = find(kr>=krThreshold & freqsToAnalyzeHz<=fmax);      % get plot fidx
+    if length(fidx)==0
+        fmax=max(freqsToAnalyzeHz);
+        fidx = find(kr>=krThreshold & freqsToAnalyzeHz<=fmax);
+    end
+
     ddf=2;
     df=10;
     nn=length(fidx);
@@ -213,6 +221,26 @@ function [out_avg,out_std] = MeanStdOmitBadPtsOneCase_usingPositiveData(data,fac
         out_avg(ifreq) = nanmean(temp(goodidx));
         out_std(ifreq) =  nanstd(temp(goodidx));
     end
+end
+
+%==========================================================================
+
+function [gSWS_avg,gSWS_std] = MeanStdOmitBadPtsOneCase_gSWS_usingPositiveData(data,factor,maxSpeed)
+        
+    idx = find(data>0 & data<maxSpeed);
+    temp_avg = mean(data(idx));
+    temp_std =  std(data(idx));
+
+    gSWS_avg = temp_avg;      % set outputs in case something goes wrong
+    gSWS_std = temp_std;      %   with goodidx below
+        
+    if temp_std>0
+        goodidx = find( abs(data-temp_avg)<factor*temp_std & data>0);        
+    else
+        goodidx=1:length(data);
+    end
+    gSWS_avg = nanmean(data(goodidx));
+    gSWS_std =  nanstd(data(goodidx));
 end
 
 %==========================================================================
