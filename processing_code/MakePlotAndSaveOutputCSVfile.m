@@ -37,11 +37,6 @@ function errorFlag = MakePlotAndSaveOutputCSVfile(par)
         clear S
     end
 
-%    Vdisp_avg = nanmean(Vdisp);     % find avg,std gSWS results
-%    Vdisp_std =  nanstd(Vdisp);
-%    Vvel_avg  = nanmean(Vvel);
-%    Vvel_std  =  nanstd(Vvel);
-
     [Vdisp_avg,Vdisp_std] = MeanStdOmitBadPtsOneCase_gSWS_usingPositiveData(Vdisp,thFactor,maxSpeed);
     [ Vvel_avg, Vvel_std] = MeanStdOmitBadPtsOneCase_gSWS_usingPositiveData( Vvel,thFactor,maxSpeed);
 
