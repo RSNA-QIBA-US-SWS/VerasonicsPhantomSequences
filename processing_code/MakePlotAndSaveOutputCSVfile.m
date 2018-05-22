@@ -98,8 +98,8 @@ function errorFlag = MakePlotAndSaveOutputCSVfile(par)
 
     fidx = GetPlotFreqIdx(kr, krThreshold, freqsToAnalyzeHz, fmax);
 
-    ddf = 2;
-    df = 10;
+    capsize = 2;       % size of caps on black error bars
+    patchwidth = 10;
     nn = length(fidx);
     patchx = NaN(1, 2*nn+2);
     patchy = NaN(1, 2*nn+2);
@@ -107,18 +107,18 @@ function errorFlag = MakePlotAndSaveOutputCSVfile(par)
     for ii = 1:nn+1
         switch ii
             case 1
-                patchx(ii)            = freqsToAnalyzeHz(fidx(ii)) - df/2;
-                patchx(2*(nn+1)-ii+1) = freqsToAnalyzeHz(fidx(ii)) - df/2;
+                patchx(ii)            = freqsToAnalyzeHz(fidx(ii)) - patchwidth/2;
+                patchx(2*(nn+1)-ii+1) = freqsToAnalyzeHz(fidx(ii)) - patchwidth/2;
                 patchy(ii)            = (1 + fracErrorBar) * phVel_avg(fidx(ii));
                 patchy(2*(nn+1)-ii+1) = (1 - fracErrorBar) * phVel_avg(fidx(ii));
             case nn+1
-                patchx(ii)            = freqsToAnalyzeHz(fidx(ii-1)) + df/2;
-                patchx(nn+2)          = freqsToAnalyzeHz(fidx(ii-1)) + df/2;
+                patchx(ii)            = freqsToAnalyzeHz(fidx(ii-1)) + patchwidth/2;
+                patchx(nn+2)          = freqsToAnalyzeHz(fidx(ii-1)) + patchwidth/2;
                 patchy(ii)            = (1 + fracErrorBar) * phVel_avg(fidx(ii-1));
                 patchy(nn+2)          = (1 - fracErrorBar) * phVel_avg(fidx(ii-1));
             otherwise
-                patchx(ii)            = freqsToAnalyzeHz(fidx(ii)) - df/2;
-                patchx(2*(nn+1)-ii+1) = freqsToAnalyzeHz(fidx(ii)) - df/2;
+                patchx(ii)            = freqsToAnalyzeHz(fidx(ii)) - patchwidth/2;
+                patchx(2*(nn+1)-ii+1) = freqsToAnalyzeHz(fidx(ii)) - patchwidth/2;
                 patchy(ii)            = (1 + fracErrorBar) / 2 * (phVel_avg(fidx(ii-1)) + phVel_avg(fidx(ii)));
                 patchy(2*(nn+1)-ii+1) = (1 - fracErrorBar) / 2 * (phVel_avg(fidx(ii-1)) + phVel_avg(fidx(ii)));
         end
@@ -133,8 +133,8 @@ function errorFlag = MakePlotAndSaveOutputCSVfile(par)
         ybot = phVel_avg(fidx(ii)) - CIfactor * phVel_std(fidx(ii));        % +/- CI
         ytop = phVel_avg(fidx(ii)) + CIfactor * phVel_std(fidx(ii));
         plot([freqsToAnalyzeHz(fidx(ii))     freqsToAnalyzeHz(fidx(ii))    ], [ybot ytop], 'Color', black, 'LineWidth', 2)
-        plot([freqsToAnalyzeHz(fidx(ii))-ddf freqsToAnalyzeHz(fidx(ii))+ddf], [ybot ybot], 'Color', black, 'LineWidth', 2)
-        plot([freqsToAnalyzeHz(fidx(ii))-ddf freqsToAnalyzeHz(fidx(ii))+ddf], [ytop ytop], 'Color', black, 'LineWidth', 2)
+        plot([freqsToAnalyzeHz(fidx(ii))-capsize freqsToAnalyzeHz(fidx(ii))+capsize], [ybot ybot], 'Color', black, 'LineWidth', 2)
+        plot([freqsToAnalyzeHz(fidx(ii))-capsize freqsToAnalyzeHz(fidx(ii))+capsize], [ytop ytop], 'Color', black, 'LineWidth', 2)
     end
     hold off
     set(gca, 'Units', 'inches', 'YTick', YTickVals)
