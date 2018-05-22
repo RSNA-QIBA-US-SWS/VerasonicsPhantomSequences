@@ -96,11 +96,7 @@ function errorFlag = MakePlotAndSaveOutputCSVfile(par)
         fmax = freqsToAnalyzeHz(min(fbadidx) - 1);
     end
 
-    fidx = find(kr>=krThreshold & freqsToAnalyzeHz<=fmax);      % get plot fidx
-    if length(fidx) == 0
-        fmax = max(freqsToAnalyzeHz);
-        fidx = find(kr>=krThreshold & freqsToAnalyzeHz<=fmax);
-    end
+    fidx = GetPlotFreqIdx(kr, krThreshold, freqsToAnalyzeHz, fmax);
 
     ddf = 2;
     df = 10;
@@ -233,6 +229,17 @@ function [gSWS_avg, gSWS_std] = MeanStdOmitBadPtsOneCase_gSWS_usingPositiveData(
     end
     gSWS_avg = nanmean(data(goodidx));
     gSWS_std = nanstd(data(goodidx));
+end
+
+%==========================================================================
+
+function freqIdx = GetPlotFreqIdx(kr, krThreshold, freqsToAnalyzeHz, fmax)
+        
+    freqIdx = find(kr>=krThreshold & freqsToAnalyzeHz<=fmax);
+    if length(freqIdx) == 0
+        fmax = max(freqsToAnalyzeHz);
+        freqIdx = find(kr>=krThreshold & freqsToAnalyzeHz<=fmax);
+    end
 end
 
 %==========================================================================
