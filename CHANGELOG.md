@@ -4,6 +4,7 @@
 * `routines/save_IQ_data.m` written to save data files that can be
   post-processed by user.
 
-# v1.3a
+# v1.3
 * change tracking time from 20 ms -> 40 ms for more robust dispersion analysis
 * change from Apache v2.0 to MIT license
+* omit bad points from group SWS calculation
