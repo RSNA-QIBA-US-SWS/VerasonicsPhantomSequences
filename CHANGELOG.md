@@ -8,3 +8,8 @@
 * Change tracking time from 20 ms -> 40 ms for more robust dispersion analysis
 * Change from Apache v2.0 to MIT license
 * Fix calculation of C5-2 B-mode aperture (Issue #16)
+
+# v1.4.0
+* change tracking time from 20 ms -> 40 ms for more robust dispersion analysis
+* change from Apache v2.0 to MIT license
+* omit bad points from group SWS calculation

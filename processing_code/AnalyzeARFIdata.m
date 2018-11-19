@@ -1,20 +1,9 @@
 
 %==========================================================================
 
-function AnalyzeARFIdata(filestamp)
+function AnalyzeARFIdata(filestamp,par)
 
         %
-
-    par.DOFmm            = 2;       % parameters for processing arfidata
-    par.minLatMM         = 4;
-    par.maxLatMM         = 15;
-    par.maxTimeMS        = 40;
-    par.minTimeMS        = -15;
-    par.rolloffTimeMS    = 15;
-    par.nStepsToRemove   = 2;
-    par.LPFcutoffKHz     = 1;
-    par.desirecPRFkHz    = 20;
-    par.freqsToAnalyzeHz = 20:10:800;        
 
     filename = [filestamp '_fromIQ_arfidata.mat'];
     S = load(filename,'arfidata','axial','lat','numrefs','push_focus','T');
@@ -46,9 +35,8 @@ function AnalyzeARFIdata(filestamp)
         freqsToAnalyzeHz = par.freqsToAnalyzeHz;
         phVel = Construct2DFTandCalcPhVel(wtVelPlane,t,lat,freqsToAnalyzeHz);
 
-        saveFile = [filestamp '_FL' num2str(fliplat) '_phVel_gSWS_data.mat'];
+        saveFile = [par.analysisDir '\' filestamp '_FL' num2str(fliplat) '_phVel_gSWS_data.mat'];
         save(saveFile,'dispPlane','tms','latmm','velPlane','veltms','vellatmm','TTPdisp','TTPvel','Vdisp','Vvel','freqsToAnalyzeHz','phVel')
-
     end
 end
 
