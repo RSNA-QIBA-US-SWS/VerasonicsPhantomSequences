@@ -138,7 +138,7 @@ TX = repmat(struct('waveform', 1, ...
                    'Delay', zeros(1,Trans.numelements)), 1, m+2);
                
 % B-Mode TX's               
-onele_bmode = round(((bmode_focus/bmode_Fnum)/aperture_size*Resource.Parameters.numRcvChannels)/4)*4;
+onele_bmode = round(((bmode_focus/bmode_Fnum)/(aperture_size*w)*Resource.Parameters.numRcvChannels)/4)*4;
 offele_bmode = Resource.Parameters.numRcvChannels-onele_bmode;
 for n = 1:m
     TX(n).Origin = [radius*sin(Angle(n)), 0.0, radius*cos(Angle(n))-radius];
