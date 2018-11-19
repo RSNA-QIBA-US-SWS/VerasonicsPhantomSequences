@@ -36,3 +36,4 @@ See `LICENSE.txt`.
 * Mark Palmeri, M.D., Ph.D.
 * Ned Rouze, Ph.D.
 * Matthew Urban, Ph.D.
+* Kristy Walsh
