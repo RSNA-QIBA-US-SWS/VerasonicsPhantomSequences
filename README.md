@@ -1,13 +1,13 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # Verasonics Phantom Sequences
-Verasonics sequences that work with the C5-2 and upgraded backplane hardware
-for software versions >= 3.0.6.
+Verasonics sequences that work with the C5-2 and L7-4.  Compatible with
+upgraded backplane hardware for software versions >= 3.0.6.
 
 This sequence has been specifically tested with software version 3.0.6 and
-3.2.1 using a Philips C5-2 transducer.
+3.2.1 using a Philips C5-2 and an L7-4 transducer.
 
-User should edit the first few parameters in `SetUpC5_2Shear_wave_MTL.m`,
+User should edit the first few parameters in `SetUp*Shear_wave_MTL.m`,
 including the `filedir` path where data will be saved.
 
 An overview of setting up and modifying Verasonics sequences, including the
