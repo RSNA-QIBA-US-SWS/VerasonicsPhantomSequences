@@ -13,3 +13,12 @@
 * change tracking time from 20 ms -> 40 ms for more robust dispersion analysis
 * change from Apache v2.0 to MIT license
 * omit bad points from group SWS calculation
+
+# v1.4.1
+* update URL/DOI for testing data to Duke Digital Research Data Repository
+
+# v1.5.0
+* add L7-4 setup script
+
+# v1.5.1
+* update `README`
