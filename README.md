@@ -32,7 +32,7 @@ group SWSs and phase velocities should appear.  Several intermediate
 files will be generated in `CWD`.
 
 # LICENSE
-See `LICENSE.txt`.
+See [LICENSE.txt](LICENSE.txt).
 
 # Contributors
 * Mark Palmeri, M.D., Ph.D. (primary maintainer)
