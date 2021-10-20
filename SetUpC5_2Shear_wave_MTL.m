@@ -281,7 +281,7 @@ Process(3).classname = 'External';
 Process(3).method = 'save_IQ_data';
 Process(3).Parameters = {'srcbuffer','inter',...
                          'srcbufnum',1,...
-                         'srcframenum',1,... %1
+                         'srcframenum',0,... %1  -- 0 is most recent, which will be 1 in this case, as there is only 1 frame in the buffer
                          'dstbuffer','none'};
                      
 
