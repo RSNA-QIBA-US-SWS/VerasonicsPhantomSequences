@@ -108,6 +108,12 @@ function errorFlag = MakePlotAndSaveOutputCSVfile(par)
         switch ii
             case 1
                 patchx(ii)            = freqsToAnalyzeHz(fidx(ii)) - patchwidth/2;
+                % if you are getting an error at this line, you may not
+                % have a propogating shear wave, preventing further
+                % analysis. This code assumes at least some phase 
+                % velocities are in the valid range (and not omitted), if 
+                % there aren't any valid points, it will error.
+                % Check the planeDisp variable in FL#_phVel_gSWS_data.mat
                 patchx(2*(nn+1)-ii+1) = freqsToAnalyzeHz(fidx(ii)) - patchwidth/2;
                 patchy(ii)            = (1 + fracErrorBar) * phVel_avg(fidx(ii));
                 patchy(2*(nn+1)-ii+1) = (1 - fracErrorBar) * phVel_avg(fidx(ii));
