@@ -108,7 +108,9 @@ function errorFlag = MakePlotAndSaveOutputCSVfile(par)
         switch ii
             case 1
                 patchx(ii)            = freqsToAnalyzeHz(fidx(ii)) - patchwidth/2;
-                % if you are getting an error at this line, you may not
+                % if you are getting an error at this line, first, make 
+                % sure you are in a directory with data. If you are and are still
+                % erroring at this point, you may not
                 % have a propogating shear wave, preventing further
                 % analysis. This code assumes at least some phase 
                 % velocities are in the valid range (and not omitted), if 
