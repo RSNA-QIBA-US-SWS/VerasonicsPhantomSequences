@@ -21,7 +21,7 @@ function errorFlag = MakePlotAndSaveOutputCSVfile(par)
     thFactor         = par.thFactor;
 
 
-    analysisFiles = dir([analysisDir '\*_FL*_phVel_gSWS_data.mat']);    % get analysis files
+    analysisFiles = dir([analysisDir '/*_FL*_phVel_gSWS_data.mat']);    % get analysis files
 
     Vdisp = NaN(1, length(analysisFiles));
     Vvel  = NaN(1, length(analysisFiles));
@@ -146,12 +146,12 @@ function errorFlag = MakePlotAndSaveOutputCSVfile(par)
     title(phantomID)
     set(gca, 'Units', 'inches', 'Position', [2.4 0.5 5.4 2.7])
 
-    savefig([saveDir '\gSWS_phVel_figure'])
+    savefig([saveDir '/gSWS_phVel_figure'])
 
 
         % make and save CSV file
 
-    saveFile = [saveDir '\gSWS_phVel_data.txt'];
+    saveFile = [saveDir '/gSWS_phVel_data.txt'];
 
     fid = fopen(saveFile, 'w');
     fprintf(fid, '\n');

@@ -35,7 +35,7 @@ function AnalyzeARFIdata(filestamp,par)
         freqsToAnalyzeHz = par.freqsToAnalyzeHz;
         phVel = Construct2DFTandCalcPhVel(wtVelPlane,t,lat,freqsToAnalyzeHz);
 
-        saveFile = [par.analysisDir '\' filestamp '_FL' num2str(fliplat) '_phVel_gSWS_data.mat'];
+        saveFile = [par.analysisDir '/' filestamp '_FL' num2str(fliplat) '_phVel_gSWS_data.mat'];
         save(saveFile,'dispPlane','tms','latmm','velPlane','veltms','vellatmm','TTPdisp','TTPvel','Vdisp','Vvel','freqsToAnalyzeHz','phVel')
     end
 end
