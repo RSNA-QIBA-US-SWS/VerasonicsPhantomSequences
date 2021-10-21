@@ -1,7 +1,8 @@
-function save_IQ_data(IQData)
+function save_IQ_data(IData,QData)
 % function save_IQ_data(IQData)
 % 
 % Author: Yufeng Deng (Duke Unviersity)
+% Modified by: Courtney Trutna
 % LICENSE: MIT
 
 global filedir filetime comment
@@ -12,9 +13,9 @@ saveChannelData = evalin('base','saveChannelData');
 
 tic
 
-IQdata = squeeze(IQData);
-I = real(IQdata);
-Q = imag(IQdata);
+%IQdata = squeeze(IQData);
+%I = real(IQdata);
+%Q = imag(IQdata);
 
 if ~saveChannelData
     comment = '';
@@ -47,11 +48,11 @@ IBIN = fullfile(filedir,[filetime comment '_IQreal.bin']);
 QBIN = fullfile(filedir,[filetime comment '_IQimag.bin']);
     
 fid=fopen(IBIN,'wb');
-fwrite(fid,I,'int32');
+fwrite(fid,IData,'int32');
 fclose(fid);
 
 fid=fopen(QBIN,'wb');
-fwrite(fid,Q,'int32');
+fwrite(fid,QData,'int32');
 fclose(fid);
 
 disp(['IQ data saved. Elapsed time is ' num2str(toc) ' seconds']);

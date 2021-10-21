@@ -3,7 +3,8 @@ global filedir
 scriptName='SETUPC5_2SHEAR_WAVE_MTL';
 
 % USER MUST EDIT THIS PATH
-filedir = '/edit/path/here';
+filedir = '/home/verasonics/cloud/Vantage-4.2.0-2001220500';
+cd(filedir)
 push_focus = 50; %mm
 push_Fnum = 1.5; % 
 pushCycle  = 900;
@@ -280,7 +281,7 @@ Process(3).classname = 'External';
 Process(3).method = 'save_IQ_data';
 Process(3).Parameters = {'srcbuffer','inter',...
                          'srcbufnum',1,...
-                         'srcframenum',0,... %1
+                         'srcframenum',0,... %1  -- 0 is most recent, which will be 1 in this case, as there is only 1 frame in the buffer
                          'dstbuffer','none'};
                      
 
@@ -582,27 +583,9 @@ UI(3).Control = {'Style','edit','String',num2str(Recon(1).senscutoff,'%1.3f'), .
                  'BackgroundColor',[0.9,0.9,0.9]}; 
      
  % -- Enable DisplayWindow's WindowButtonDown callback function for switching acquisition loops.
-UI(4).Statement = 'set(Resource.DisplayWindow(1).figureHandle,''WindowButtonDownFcn'',@wbdCallback);';
-UI(4).Callback = {'wbdCallback.m',...
-    'function wbdCallback(hObject,eventdata)',...
-    ' ',...
-    'persistent init wbFig wbAxesl',...
-    'if isempty(init)',...
-    '   wbFig = evalin(''base'',''Resource.DisplayWindow(1).figureHandle'');',...
-    '   wbAxes = get(wbFig,''CurrentAxes'');',...
-    '   init = 1;',...
-    'end',...
-    '% if left mouse button ...',...
-    'if strcmp(get(hObject,''SelectionType''),''normal'')',...
-    '   % set startEvent for ARFI.',...
-    '   lastBmodeEvent = evalin(''base'',''lastBmodeEvent'')',...
-    '   Control = evalin(''base'',''Control'');',...
-    '   Control(1).Command = ''set&Run'';',...
-    '   Control(1).Parameters = {''Parameters'',1,''startEvent'',lastBmodeEvent};',...
-    '   evalin(''base'',''Resource.Parameters.startEvent = lastBmodeEvent;'');',...
-    '   assignin(''base'',''Control'', Control);',...
-    'end',...
-    'return'};       
+UI(4).Control = {'UserC2', 'Style', 'VsPushButton', 'Label', 'Trigger Acq.'};
+UI(4).Callback = text2cell('%TriggeredAcquisition');
+
 
 clear i j n sensx sensy
 
@@ -610,6 +593,20 @@ clear i j n sensx sensy
 frameRateFactor = 2;
 
 % Save all the structures to a .mat file.
-save(['./MatFiles/' scriptName]);
-display(['filename =''' scriptName ''';VSX'])
+save(['./MatFiles/' scriptName '.mat']);
+display(['filename =''' scriptName '.mat'';VSX'])
 % eval(['filename =''' scriptName ''';VSX'])
+
+return
+
+
+%TriggeredAcquisition
+Control =evalin('base', 'Control');
+Control(1).Command='set';
+lastBmodeEvent = evalin('base', 'lastBmodeEvent');
+Control(1).Parameters = {'Parameters', 1, 'startEvent', lastBmodeEvent};
+evalin('base', sprintf('Resource.Parameters.startEvent = %d;', lastBmodeEvent));
+assignin('base','Control', Control);
+disp('Switching to triggered acquisition')
+return
+%TriggeredAcquisition

@@ -21,7 +21,7 @@ function errorFlag = MakePlotAndSaveOutputCSVfile(par)
     thFactor         = par.thFactor;
 
 
-    analysisFiles = dir([analysisDir '\*_FL*_phVel_gSWS_data.mat']);    % get analysis files
+    analysisFiles = dir([analysisDir '/*_FL*_phVel_gSWS_data.mat']);    % get analysis files
 
     Vdisp = NaN(1, length(analysisFiles));
     Vvel  = NaN(1, length(analysisFiles));
@@ -108,6 +108,14 @@ function errorFlag = MakePlotAndSaveOutputCSVfile(par)
         switch ii
             case 1
                 patchx(ii)            = freqsToAnalyzeHz(fidx(ii)) - patchwidth/2;
+                % if you are getting an error at this line, first, make 
+                % sure you are in a directory with data. If you are and are still
+                % erroring at this point, you may not
+                % have a propogating shear wave, preventing further
+                % analysis. This code assumes at least some phase 
+                % velocities are in the valid range (and not omitted), if 
+                % there aren't any valid points, it will error.
+                % Check the planeDisp variable in FL#_phVel_gSWS_data.mat
                 patchx(2*(nn+1)-ii+1) = freqsToAnalyzeHz(fidx(ii)) - patchwidth/2;
                 patchy(ii)            = (1 + fracErrorBar) * phVel_avg(fidx(ii));
                 patchy(2*(nn+1)-ii+1) = (1 - fracErrorBar) * phVel_avg(fidx(ii));
@@ -146,12 +154,12 @@ function errorFlag = MakePlotAndSaveOutputCSVfile(par)
     title(phantomID)
     set(gca, 'Units', 'inches', 'Position', [2.4 0.5 5.4 2.7])
 
-    savefig([saveDir '\gSWS_phVel_figure'])
+    savefig([saveDir '/gSWS_phVel_figure'])
 
 
         % make and save CSV file
 
-    saveFile = [saveDir '\gSWS_phVel_data.txt'];
+    saveFile = [saveDir '/gSWS_phVel_data.txt'];
 
     fid = fopen(saveFile, 'w');
     fprintf(fid, '\n');
