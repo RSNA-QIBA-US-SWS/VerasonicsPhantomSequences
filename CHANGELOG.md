@@ -22,3 +22,6 @@
 
 # v1.5.1
 * update `README`
+
+# v1.6.0
+* Update to be compatible with software `v4.2.0`

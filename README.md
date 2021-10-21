@@ -1,10 +1,10 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # Verasonics Phantom Sequences
-Verasonics sequences that work with the C5-2 and L7-4.  Compatible with
-upgraded backplane hardware for software versions `>=3.0.6`.  This sequence has
-been specifically tested with software version `3.0.6` and `3.2.1` using a
-Philips C5-2 and an L7-4 transducer.
+Verasonics sequences that work with the C5-2 and L7-4 on software version
+`4.2.0`.  The latest software version is `4.5.x`, but these sequences have not
+been tested with that latest version.  Please feel free to submit an Issue if
+you discover problems with these newer versions of software.
 
 User should edit the first few parameters in `SetUp*Shear_wave_MTL.m`,
 including the `filedir` path where data will be saved.
@@ -42,3 +42,4 @@ See [LICENSE.txt](LICENSE.txt).
 * Ned Rouze, Ph.D. (primary post-processing algorithm development)
 * Matthew Urban, Ph.D.
 * Kristy Walsh
+* Courtney Trutna Paley (update to v4.x of Vantage software)
