@@ -1,3 +1,4 @@
+[![DOI](https://zenodo.org/badge/91368068.svg)](https://zenodo.org/badge/latestdoi/91368068)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # Verasonics Phantom Sequences
