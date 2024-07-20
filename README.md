@@ -43,7 +43,7 @@ See [LICENSE.txt](LICENSE.txt).
 * Mark Palmeri, M.D., Ph.D. (primary maintainer)
 * Yufeng Deng, Ph.D. (primary sequence development)
 * Ned Rouze, Ph.D. (primary post-processing algorithm development)
-* Courtney Trutna Paley (update to v4.x of Vantage software)
+* Courtney Trutna Paley, Ph.D. (update to v4.x of Vantage software)
 * David Bradway, Ph.D.
 * Derek Chan, Ph.D.
 * Matthew Urban, Ph.D.
