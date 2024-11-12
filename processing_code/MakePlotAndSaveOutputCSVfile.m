@@ -214,8 +214,8 @@ function [out_avg, out_std] = MeanStdOmitBadPtsOneCase_usingPositiveData(data, f
         else
             goodidx = 1:npts;
         end
-        out_avg(ifreq) = nanmean(temp(goodidx));
-        out_std(ifreq) = nanstd(temp(goodidx));
+        out_avg(ifreq) =mean(temp(goodidx),'omitnan');% nanmean(temp(goodidx));
+        out_std(ifreq) =std(temp(goodidx),'omitnan');% nanstd(temp(goodidx));
     end
 end
 
@@ -235,8 +235,10 @@ function [gSWS_avg, gSWS_std] = MeanStdOmitBadPtsOneCase_gSWS_usingPositiveData(
     else
         goodidx = 1:length(data);
     end
-    gSWS_avg = nanmean(data(goodidx));
-    gSWS_std = nanstd(data(goodidx));
+    %gSWS_avg = nanmean(data(goodidx));
+    gSWS_avg = mean(data(goodidx),'omitnan');
+    %gSWS_std = nanstd(data(goodidx));
+    gSWS_std = std(data(goodidx), 'omitnan');
 end
 
 %==========================================================================
