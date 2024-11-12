@@ -1,10 +1,13 @@
 clear all
-global filedir
+global filedir outdir
 scriptName='SETUPC5_2SHEAR_WAVE_MTL';
 
 % USER MUST EDIT THIS PATH
-filedir = '/home/verasonics/cloud/Vantage-4.2.0-2001220500';
-cd(filedir)
+filedir = '/home/verasonics/cloud/Vantage-4.2.0-2001220500'; % CHANGE ME to point to the install of the Vantage Software
+cd(filedir);
+sourcedir = '/home/verasonics/repos/VerasonicsPhantomSequences'; % CHANGE ME to point to the local download of this repository
+addpath(genpath(sourcedir));
+outdir = pwd; % CHANGE ME if you would like the output files to be stored somewhere that is not the Vantage Software Folder
 push_focus = 50; %mm
 push_Fnum = 1.5; % 
 pushCycle  = 900;
