@@ -168,8 +168,8 @@ function [out_avg,out_std] = MeanStdOmitBadPtsOneCase_usingPositiveData(data,fac
         else
             goodidx=1:npts;
         end
-        out_avg(ifreq) = nanmean(temp(goodidx));
-        out_std(ifreq) =  nanstd(temp(goodidx));
+        out_avg(ifreq) = mean(temp(goodidx), 'omitnan'); %nanmean(temp(goodidx));
+        out_std(ifreq) =  std(temp(goodidx), 'omitnan'); %nanstd(temp(goodidx));
     end
 end
 

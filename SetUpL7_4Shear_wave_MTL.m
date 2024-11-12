@@ -3,7 +3,8 @@ global filedir
 scriptName='SETUPL7_4Shear_wave_MTL';
 
 %% Commonly changing variables
-filedir = '/home/verasonics/cloud/Vantage-4.2.0-2001220500';
+%filedir = '/home/verasonics/cloud/Vantage-4.2.0-2001220500';
+filedir = 'C:\Users\Administrator\Documents\VantageNXT-1.1.13\';
 cd(filedir)
 saveChannelData = 0;
 saveIQData = 1;
@@ -275,7 +276,9 @@ Process(1).Parameters = {'imgbufnum',1, ...   % number of buffer to process.
                          'compression',0.5, ...      % X^0.5 normalized to output word size
                          'mappingMode','full', ...
                          'display',1, ...     % display image after processing
-                         'displayWindow',1};
+                         'displayWindow',1, ...
+                         'compressMethod', 'power',...
+                         'compressFactor', 40}; %compressMethod and compressFactor are both required NXT commands that were not previously here
          
 Process(2).classname = 'External';
 Process(2).method = 'save_channel_data';
