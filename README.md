@@ -48,3 +48,4 @@ See [LICENSE.txt](LICENSE.txt).
 * Derek Chan, Ph.D.
 * Matthew Urban, Ph.D.
 * Kristy Walsh, Ph.D.
+* Anna Knight, Ph.D.
