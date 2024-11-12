@@ -3,7 +3,8 @@ global filedir
 scriptName='SETUPL7_4Shear_wave_MTL';
 
 %% Commonly changing variables
-filedir = '/home/verasonics/cloud/Vantage-4.2.0-2001220500';
+%filedir = '/home/verasonics/cloud/Vantage-4.2.0-2001220500';
+filedir = 'C:\Users\Administrator\Documents\VantageNXT-1.1.13\';
 cd(filedir)
 saveChannelData = 0;
 saveIQData = 1;
