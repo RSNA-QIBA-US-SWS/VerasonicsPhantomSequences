@@ -5,7 +5,7 @@ function save_IQ_data(IData,QData)
 % Modified by: Courtney Trutna
 % LICENSE: MIT
 
-global filedir filetime comment
+global outdir filetime comment
 
 display('Start saving IQ data');
 
@@ -21,7 +21,7 @@ if ~saveChannelData
     comment = '';
     filetime = datestr(clock, 'yyyymmddHHMMSS');
     
-    CHMAT = fullfile(filedir,[filetime comment '_parameters']);
+    CHMAT = fullfile(outdir,[filetime comment '_parameters']);
     Resource = evalin('base','Resource');
     PData = evalin('base','PData');
     Trans = evalin('base','Trans');
@@ -44,8 +44,8 @@ if ~saveChannelData
         'pushAngleDegree','Vvalue','Vpush','-v7.3')
 end
 
-IBIN = fullfile(filedir,[filetime comment '_IQreal.bin']);
-QBIN = fullfile(filedir,[filetime comment '_IQimag.bin']);
+IBIN = fullfile(outdir,[filetime comment '_IQreal.bin']);
+QBIN = fullfile(outdir,[filetime comment '_IQimag.bin']);
     
 fid=fopen(IBIN,'wb');
 fwrite(fid,IData,'int32');
