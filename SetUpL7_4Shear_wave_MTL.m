@@ -276,7 +276,9 @@ Process(1).Parameters = {'imgbufnum',1, ...   % number of buffer to process.
                          'compression',0.5, ...      % X^0.5 normalized to output word size
                          'mappingMode','full', ...
                          'display',1, ...     % display image after processing
-                         'displayWindow',1};
+                         'displayWindow',1, ...
+                         'compressMethod', 'power',...
+                         'compressFactor', 40}; %compressMethod and compressFactor are both required NXT commands that were not previously here
          
 Process(2).classname = 'External';
 Process(2).method = 'save_channel_data';
