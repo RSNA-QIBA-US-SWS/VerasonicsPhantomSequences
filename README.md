@@ -49,5 +49,5 @@ See [LICENSE.txt](LICENSE.txt).
 * Derek Chan, Ph.D.
 * Matthew Urban, Ph.D.
 * Kristy Walsh, Ph.D.
-* Anna Knight, Ph.D.
-* Kaden Bock
+* Anna Knight, Ph.D. (updates for L7-4 and NXT support)
+* Kaden Bock (updates for NXT support)

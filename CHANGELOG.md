@@ -39,3 +39,7 @@
 
 * Add missing parameters to sequence files
 * Update post-processing scripts
+
+# v1.7.0
+
+* Add support for NXT systems
