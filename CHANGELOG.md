@@ -19,27 +19,31 @@
 * change from Apache v2.0 to MIT license
 * omit bad points from group SWS calculation
 
-# v1.4.1
+## v1.4.1
 
 * update URL/DOI for testing data to Duke Digital Research Data Repository
 
-# v1.5.0
+## v1.5.0
 
 * add L7-4 setup script
 
-# v1.5.1
+## v1.5.1
 
 * update `README`
 
-# v1.6.0
+## v1.6.0
 
 * Update to be compatible with software `v4.2.0`
 
-# v1.6.2
+## v1.6.2
 
 * Add missing parameters to sequence files
 * Update post-processing scripts
 
-# v1.7.0
+## v1.7.0
 
 * Add support for NXT systems
+
+## v1.7.1
+
+* Fix L7-4 tracking config (Vantage & NXT)
