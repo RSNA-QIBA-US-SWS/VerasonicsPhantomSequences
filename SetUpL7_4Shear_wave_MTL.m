@@ -66,7 +66,7 @@ PData(2).Size(1) = ceil((P.endDepth-P.startDepth)/PData(2).PDelta(3));
 PData(2).Size(2) = ceil(((Trans.numelements-pushElementNum)*Trans.spacing)/PData(2).PDelta(1))+1;
 PData(2).Size(3) = 1;      % single image page
 PData(2).Origin = [-Trans.spacing*(Trans.numelements-pushElementNum)/2,0,P.startDepth] ; % x,y,z of upper lft crnr
-% [PData(2).Region,PData(2).numRegions]=createRegions(PData(2));
+PData(2).Region = computeRegions(PData(2));
 
 %% Specify resource buffers
 % RcvBuffer stores channel data. Buffer 1 stores Bmode data
