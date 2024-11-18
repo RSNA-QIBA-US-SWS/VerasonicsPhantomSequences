@@ -8,6 +8,7 @@ cd(filedir);
 sourcedir = '/home/verasonics/repos/VerasonicsPhantomSequences'; % CHANGE ME to point to the local download of this repository
 addpath(genpath(sourcedir));
 outdir = pwd; % CHANGE ME if you would like the output files to be stored somewhere that is not the Vantage Software Folder
+
 push_focus = 50; %mm
 push_Fnum = 1.5; % 
 pushCycle  = 900;
@@ -271,7 +272,9 @@ Process(1).Parameters = {'imgbufnum',1, ...   % number of buffer to process.
                          'compression',0.5, ...      % X^0.5 normalized to output word size
                          'mappingMode','full', ...
                          'display',1, ...     % display image after processing
-                         'displayWindow',1};
+                         'displayWindow',1, ...
+                         'compressMethod', 'power',...
+                         'compressFactor', 40}; %compressMethod and compressFactor are both required NXT commands that were not previously here
                             
 Process(2).classname = 'External';
 Process(2).method = 'save_channel_data';
