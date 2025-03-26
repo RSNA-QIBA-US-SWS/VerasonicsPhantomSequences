@@ -2,14 +2,17 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # Verasonics Phantom Sequences
-Verasonics sequences that work with the C5-2 and L7-4 on software version `Vantage-4.2.0-2001220500`.
+Verasonics sequences that work with the C5-2 and L7-4 on software version
+`Vantage-4.2.0-2001220500`, and the L11-5 on software verion
+`Vantage-4.9.6-2502061500`.
 
 Please feel free to submit an
 [Issue](https://github.com/RSNA-QIBA-US-SWS/VerasonicsPhantomSequences/issues)
 if you discover problems with these newer versions of software or any bugs.
 
 User should edit the first few parameters in `SetUp*Shear_wave_MTL.m`,
-including the `filedir` path where data will be saved.
+including the `filedir` path where data will be saved.  Some lines have been
+specifically annotated with `CHANGE ME`.
 
 An overview of setting up and modifying Verasonics sequences, including the
 background for these specific sequences, can be found in this
@@ -33,7 +36,7 @@ Test data can be downloaded from the [Duke Digital Repository](https://doi.org/1
 
 The analysis of these data will take about 10 minutes, and then the figure with
 group SWSs and phase velocities should appear.  Several intermediate files will
-be generated in `CWD`.
+be generated in the `cwd`.
 
 ## LICENSE
 
@@ -50,4 +53,4 @@ See [LICENSE.txt](LICENSE.txt).
 * Matthew Urban, Ph.D.
 * Kristy Walsh, Ph.D.
 * Anna Knight, Ph.D. (updates for L7-4 and NXT support)
-* Kaden Bock (updates for NXT support)
+* Kaden Bock (updates for NXT and L11-5 support)
