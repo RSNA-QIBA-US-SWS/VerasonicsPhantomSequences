@@ -3,7 +3,7 @@
 
 # Verasonics Phantom Sequences
 Verasonics sequences that work with the C5-2 and L7-4 on software version
-`Vantage-4.2.0-2001220500`, and the L11-5 on software verion
+`Vantage-4.2.0-2001220500`, and the L11-5v on software verion
 `Vantage-4.9.6-2502061500`.
 
 Please feel free to submit an
