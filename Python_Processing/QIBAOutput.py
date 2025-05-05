@@ -13,8 +13,12 @@ Author: Kaden Bock (4/24/2025)
 """
 
 import os
+import pymatreader
 import numpy as np
+from IPython.display import Image
+from functools import partial
 from matplotlib import pyplot as plt
+from matplotlib import animation as ani
 from processing_functions import AnalysisPar
 from processing_functions import DataAcqPar
 from processing_functions import QIBAPlotPar
@@ -279,6 +283,116 @@ class QIBAOutput:
         
         return
     
+    def show_spacetime_plot_for_acq(self, acq_timestamp:str, plane_type:str='velocity', side:str="both"):
+        """ This function loads the generated plane data during processing to show the generated space-time
+            plot or plots.
+
+        Args:
+            acq_timestamp (str): The timestamp of the acq to be loaded.
+            plane_type (str, optional): The type of plane to be loaded, can be either 'velocity' or 
+                'displacement. Defaults to 'velocity'.
+            side (str, optional): The direction of wave propagation to be loaded. Can be 'left', 'right', 
+                or 'both'. Defaults to "both".
+
+        Raises:
+            KeyError: In the event that the inputs are not specified correctly.
+        """
+        
+        plane_type = plane_type.strip()
+        plane_type = plane_type.lower()        
+        if plane_type not in ['velocity', 'displacement']:
+            raise KeyError("The displayed plane type must either be 'velocity' or 'displacement.'")
+        
+        side = side.strip()
+        side = side.lower()
+        if side not in ['left', 'right', 'both']:
+            raise KeyError("The lateral side displayed must either be 'left', 'right', or 'both'.")
+        
+        side_key_options = {
+            'left' : [0],
+            'right' : [1],
+            'both' : [0, 1]
+        }
+        
+        dir = self.analysis_params.save_dir
+        
+        titles = ['Leftward', 'Rightward']
+        
+        for side_key in side_key_options[side]:
+            mat_filename = os.path.join(dir, acq_timestamp + "_FL{}_phVel_gSWS_data.mat".format(side_key))
+            
+            loaded_dict = pymatreader.read_mat(mat_filename)
+            
+            if plane_type == 'velocity':
+                tms = loaded_dict['veltms']
+                latmm = loaded_dict['vellatmm']
+                plane = loaded_dict['velPlane']
+                vel = loaded_dict['VVel']
+                clim = [-.3, .3]
+                
+            else:
+                tms = loaded_dict['tms']
+                latmm = loaded_dict['latmm']
+                plane = loaded_dict['dispPlane']
+                vel = loaded_dict['Vdisp']
+                clim = [-3, 3]
+                
+            aspect = (latmm[1] - latmm[0]) / (tms[1] - tms[0])
+                
+            plt.imshow(plane, extent = [tms[0], tms[-1], latmm[-1], latmm[0]], aspect=aspect)
+            plt.colorbar()
+            plt.clim(clim)
+            plt.xlabel("Time (ms)")
+            plt.ylabel("Lateral Position (mm)")
+            plt.suptitle("{} propgating wave for acq: ".format(titles[side_key]) + acq_timestamp)
+            plt.title("Shear Wave Speed = {:4.2f} m/s".format(vel))
+            
+            plt.show()
+                    
+        return
+    
+    def generate_displacement_gif_for_acq(self, acq_timestamp:str):
+        """ Generates a lateral by axial displacment data gif for the specified acquisition.
+
+        Args:
+            acq_timestamp (str): The desired acquisition to generate a gif for.
+
+        Returns:
+            Image Object: A handle for the output gif file, re-read into memory so that it
+                can be displayed neatly by the Juptyr notebook 
+        """
+        
+        mat_filename = os.path.join(self.analysis_params.save_dir, acq_timestamp + "_fromIQ_arfidata.mat")
+        
+        loaded_dict = pymatreader.read_mat(mat_filename)
+        
+        latmm = loaded_dict['lat']*10
+        axialmm = loaded_dict['axial']*10
+        arfidata = loaded_dict['arfidata']
+        T = loaded_dict['T']
+        
+        aspect = (axialmm[1] - axialmm[0]) / (latmm[1] - latmm[0])
+        extent = [latmm[0], latmm[-1], axialmm[-1], axialmm[0]]
+        
+        fig = plt.figure(num=2, clear=True)
+        ax = fig.add_subplot(111)
+        
+        ax.set_ylabel("Axial (mm)")
+        ax.set_xlabel("Lateral (mm)")
+        fig.suptitle("Acq: {}".format(acq_timestamp))
+        fig.set_size_inches((4,4))
+        
+        animation = ani.FuncAnimation(fig, partial(update_axis_for_fig_animation, ax=ax, arfidata=arfidata, 
+                                                   extent=extent, aspect=aspect, T=T), len(T), interval=100)
+        
+        ani_filename = os.path.join(self.analysis_params.save_dir, acq_timestamp + "_disp_data.gif")
+        animation.save(ani_filename)
+        
+        plt.close()
+        
+        return Image(open(ani_filename, 'rb').read(), format='png')
+        
+    
 def generate_QIBA_output_object(analysis_params:AnalysisPar.AnalysisPar):
     """ Generates a QIBA output object and associates it with the given analysis parameters.
 
@@ -292,3 +406,19 @@ def generate_QIBA_output_object(analysis_params:AnalysisPar.AnalysisPar):
     """
     obj = QIBAOutput(analysis_params)
     return obj
+
+def update_axis_for_fig_animation(i, ax, arfidata:np.array, extent:list, aspect:float, T:np.array):
+    """ This function exists as the helper function to update the figure for the gif animation.
+
+    Args:
+        i (int): Iterater variable passed in by the animation fuction
+        ax (plt.axes): The axies object that the image is drawn onto
+        arfidata (np.array): The arfidata array that contains all of the displacement data for
+            the acquisition.
+        extent (list): The pre-computed extent of the image
+        aspect (float): The pre-computed aspect of the image
+        T (np.array): The time array that corresponds to the time each tracking frame was taken
+    """
+    ax.imshow(arfidata[:,:,i], extent=extent, aspect=aspect, vmin=-3, vmax=3)
+    ax.set_title("T = {:4.2f} ms".format(T[i]))
+    return

@@ -67,14 +67,7 @@ def Analyze_All_Acquisitions(pwd:str, analysis_params:AnalysisPar.AnalysisPar, p
         # Add processed data to the output object
         QIBAOutput_obj.add_output_of_QIBA_Processing_data(output_ph_vel_and_gSWS_data_dict, acq_params)
     
-    # Filter output speeds for outliers    
-    QIBAOutput_obj.filter_speeds_for_valid_data(plot_params)
-    
-    # Generate the final QIBA-style output plot
-    QIBAOutput_obj.generate_QIBA_output_plot(plot_params)
-    
-    # Generate the final CSV file containing all outputs.
-    QIBAOutput_obj.generate_QIBA_ouput_textfile(plot_params)
+    filter_SWSs_and_display_final_outputs(QIBAOutput_obj, plot_params)
     
     return QIBAOutput_obj
 
@@ -292,3 +285,26 @@ def analyze_STPs_for_group_and_phase_velocity(output_disp_and_vel_STP_dict:dict,
         output_dict[plane_side] = output_sub_dict
 
     return output_dict
+
+
+def filter_SWSs_and_display_final_outputs(QIBA_output:QIBAOutput.QIBAOutput, plot_params:QIBAPlotPar.QIBAPlotPar):
+    """ Filters the output data for valid shear wave speeds, and displays and saves the final results.
+
+    Args:
+        QIBA_output (QIBAOutput.QIBAOutput): A QIBAOutput Object that contains all of the stored 
+            SWS results
+        plot_params (QIBAPlotPar.QIBAPlotPar): A QIBAPlotPar object that holds all of the
+            parameters used to generate the final output plot.
+
+    """
+    
+    # Filter output speeds for outliers    
+    QIBA_output.filter_speeds_for_valid_data(plot_params)
+    
+    # Generate the final QIBA-style output plot
+    QIBA_output.generate_QIBA_output_plot(plot_params)
+    
+    # Generate the final CSV file containing all outputs.
+    QIBA_output.generate_QIBA_ouput_textfile(plot_params)
+    
+    return
