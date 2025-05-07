@@ -152,6 +152,8 @@ class QIBAOutput:
         Args:
             plot_params (QIBAPlotPar.QIBAPlotPar): The QIBAPlotPar object that contains
                 all of the parameters used to plot the outputs.
+            save (bool, optional): Save-flag for saving the finalized output plot as a png.
+                Defaults to True.
         """
         
         fig = plt.figure(num=0, clear=True, figsize=(9,3))
@@ -238,6 +240,9 @@ class QIBAOutput:
                 all of the parameters used to plot the outputs.
         """
         
+        conf_int_frac = plot_params.conf_int_factor
+        frac_error = plot_params.error_bar_frac
+        
         file = os.path.join(self.analysis_params.save_dir, "gSWS_phVel_data.txt")
         
         fp = open(file, 'w')
@@ -245,25 +250,25 @@ class QIBAOutput:
         fp.write("\n")
         fp.write("phantom {}\n".format(plot_params.phantom_ID))
         fp.write('\n')
-        fp.write(',group SWS (m/s),  95% CI,  30% mean\n')
+        fp.write(',group SWS (m/s),  {:.2}% CI,  {:.2}% mean\n'.format(conf_int_frac, frac_error))
         
         group_disp_mean = np.nanmean(self.filtered_disp_gSWSs)
         group_disp_std = np.nanstd(self.filtered_disp_gSWSs)
         
         fp.write("displacement,{:7.3f},{:7.3f},{:7.3f}\n".format(
-            group_disp_mean, 1.95*group_disp_std, 0.3*group_disp_mean
+            group_disp_mean, conf_int_frac*group_disp_std, frac_error*group_disp_mean
         ))
         
         group_vel_mean = np.nanmean(self.filtered_vel_gSWSs)
         group_vel_std = np.nanstd(self.filtered_vel_gSWSs)
         
         fp.write("velocity,{:7.3f},{:7.3f},{:7.3f}\n".format(
-            group_vel_mean, 1.95*group_vel_std, 0.3*group_vel_mean
+            group_vel_mean, conf_int_frac*group_vel_std, frac_error*group_vel_mean
         ))
         
         fp.write("\n\n")
         
-        fp.write("frequency (Hz),phase velocity (m/s),  95% CI,  30% mean\n")
+        fp.write("frequency (Hz),phase velocity (m/s),  {:.2}% CI,  {:.2}% mean\n".format(conf_int_frac, frac_error))
         
         phase_vel_means = np.nanmean(self.filtered_phVels, axis=0)
         phase_vel_stds = np.nanstd(self.filtered_phVels, axis=0)
@@ -281,14 +286,14 @@ class QIBAOutput:
         
         for ind, freq in enumerate(plotting_freqs):
             fp.write("{:7.3f},{:7.3f},{:7.3f},{:7.3f}\n".format(
-            freq, phase_vel_means[ind], 1.95*phase_vel_stds[ind], 0.3*phase_vel_means[ind]
+            freq, phase_vel_means[ind], conf_int_frac*phase_vel_stds[ind], frac_error*phase_vel_means[ind]
             ))
             
         fp.close()        
         
         return
     
-    def show_spacetime_plot_for_acq(self, acq_timestamp:str, plane_type:str='velocity', side:str="both"):
+    def show_spacetime_plot_for_acq(self, acq_timestamp:str, plane_type:str='velocity', side:str="both", clim:list | str="default"):
         """ This function loads the generated plane data during processing to show the generated space-time
             plot or plots.
 
@@ -298,6 +303,9 @@ class QIBAOutput:
                 'displacement. Defaults to 'velocity'.
             side (str, optional): The direction of wave propagation to be loaded. Can be 'left', 'right', 
                 or 'both'. Defaults to "both".
+            clim (list | str, optional): The colorbar limits for the displayed spacetime plots. Defaults to
+                'default', which is [-.3, .3] microns for velocity spacetime plots and [-3, 3] microns for
+                displacement spacetime plots.
 
         Raises:
             KeyError: In the event that the inputs are not specified correctly.
@@ -312,6 +320,12 @@ class QIBAOutput:
         side = side.lower()
         if side not in ['left', 'right', 'both']:
             raise KeyError("The lateral side displayed must either be 'left', 'right', or 'both'.")
+        
+        if clim == 'default':
+            if plane_type == 'velocity':
+                clim = [-.3, .3]
+            else:
+                clim = [-3, 3]
         
         side_key_options = {
             'left' : [0],
@@ -333,19 +347,18 @@ class QIBAOutput:
                 latmm = loaded_dict['vellatmm']
                 plane = loaded_dict['velPlane']
                 vel = loaded_dict['VVel']
-                clim = [-.3, .3]
                 
             else:
                 tms = loaded_dict['tms']
                 latmm = loaded_dict['latmm']
                 plane = loaded_dict['dispPlane']
                 vel = loaded_dict['Vdisp']
-                clim = [-3, 3]
                 
             aspect = (latmm[1] - latmm[0]) / (tms[1] - tms[0])
                 
             plt.imshow(plane, extent = [tms[0], tms[-1], latmm[-1], latmm[0]], aspect=aspect)
-            plt.colorbar()
+            cbar = plt.colorbar()
+            cbar.set_label("Displacement (microns)")
             plt.clim(clim)
             plt.xlabel("Time (ms)")
             plt.ylabel("Lateral Position (mm)")
@@ -356,11 +369,13 @@ class QIBAOutput:
                     
         return
     
-    def generate_displacement_gif_for_acq(self, acq_timestamp:str):
+    def generate_displacement_gif_for_acq(self, acq_timestamp:str, clim=[-3, 3]):
         """ Generates a lateral by axial displacment data gif for the specified acquisition.
 
         Args:
             acq_timestamp (str): The desired acquisition to generate a gif for.
+            clim (list | str, optional): The colorbar limits for the displayed spacetime plots. Defaults to
+                [-3, 3] microns.
 
         Returns:
             Image Object: A handle for the output gif file, re-read into memory so that it
@@ -387,8 +402,13 @@ class QIBAOutput:
         fig.suptitle("Acq: {}".format(acq_timestamp))
         fig.set_size_inches((4,4))
         
-        animation = ani.FuncAnimation(fig, partial(update_axis_for_fig_animation, ax=ax, arfidata=arfidata, 
-                                                   extent=extent, aspect=aspect, T=T), len(T), interval=100)
+        im = ax.imshow(arfidata[:,:,0], extent=extent, aspect=aspect, vmin=clim[0], vmax=clim[1])
+        
+        cbar = fig.colorbar(im, ax=ax)
+        cbar.set_label("Displacement (microns)")
+        
+        animation = ani.FuncAnimation(fig, partial(update_axis_for_fig_animation, ax=ax, arfidata=arfidata[:,:,1:], 
+                                                   extent=extent, aspect=aspect, T=T, clim=clim), len(T)-1, interval=100)
         
         ani_filename = os.path.join(self.analysis_params.save_dir, acq_timestamp + "_disp_data.gif")
         animation.save(ani_filename)
@@ -412,7 +432,7 @@ def generate_QIBA_output_object(analysis_params:AnalysisPar.AnalysisPar):
     obj = QIBAOutput(analysis_params)
     return obj
 
-def update_axis_for_fig_animation(i, ax, arfidata:np.array, extent:list, aspect:float, T:np.array):
+def update_axis_for_fig_animation(i, ax, arfidata:np.array, extent:list, aspect:float, T:np.array, clim:list=[-3,3]):
     """ This function exists as the helper function to update the figure for the gif animation.
 
     Args:
@@ -423,7 +443,8 @@ def update_axis_for_fig_animation(i, ax, arfidata:np.array, extent:list, aspect:
         extent (list): The pre-computed extent of the image
         aspect (float): The pre-computed aspect of the image
         T (np.array): The time array that corresponds to the time each tracking frame was taken
+        clim (list, optional) : The 
     """
-    ax.imshow(arfidata[:,:,i], extent=extent, aspect=aspect, vmin=-3, vmax=3)
+    ax.imshow(arfidata[:,:,i], extent=extent, aspect=aspect, vmin=clim[0], vmax=clim[1])
     ax.set_title("T = {:4.2f} ms".format(T[i]))
     return
