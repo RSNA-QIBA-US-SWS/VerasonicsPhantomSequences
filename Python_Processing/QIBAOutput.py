@@ -400,12 +400,14 @@ class QIBAOutput:
         ax.set_ylabel("Axial (mm)")
         ax.set_xlabel("Lateral (mm)")
         fig.suptitle("Acq: {}".format(acq_timestamp))
-        fig.set_size_inches((4,4))
+
         
         im = ax.imshow(arfidata[:,:,0], extent=extent, aspect=aspect, vmin=clim[0], vmax=clim[1])
         
         cbar = fig.colorbar(im, ax=ax)
         cbar.set_label("Displacement (microns)")
+        
+        fig.set_size_inches((4,4))
         
         animation = ani.FuncAnimation(fig, partial(update_axis_for_fig_animation, ax=ax, arfidata=arfidata[:,:,1:], 
                                                    extent=extent, aspect=aspect, T=T, clim=clim), len(T)-1, interval=100)
