@@ -145,7 +145,7 @@ class QIBAOutput:
         
         return
     
-    def generate_QIBA_output_plot(self, plot_params:QIBAPlotPar.QIBAPlotPar):
+    def generate_QIBA_output_plot(self, plot_params:QIBAPlotPar.QIBAPlotPar, save:bool=True):
         """ Generates the final QIBA output plot, which displays both group speeds 
             and the phase-velocity dispersion curve.       
 
@@ -221,6 +221,11 @@ class QIBAOutput:
         phase_ax.set_title(plot_params.phantom_ID)
         
         plt.show()
+        
+        if save:
+            output_dir = self.analysis_params.save_dir
+            filename = os.path.join(output_dir, "gSWS_phVel_figure")
+            plt.savefig(filename, format='png')
         
         return
     
