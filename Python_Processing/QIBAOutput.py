@@ -222,12 +222,12 @@ class QIBAOutput:
         phase_ax.set_xlabel("frequency (Hz)")
         phase_ax.set_title(plot_params.phantom_ID)
         
-        plt.show()
-        
         if save:
             output_dir = self.analysis_params.save_dir
-            filename = os.path.join(output_dir, "gSWS_phVel_figure")
-            plt.savefig(filename, format='png')
+            filename = os.path.join(output_dir, "gSWS_phVel_figure.png")
+            fig.savefig(filename)
+            
+        fig.show()
         
         return
     
@@ -250,7 +250,7 @@ class QIBAOutput:
         fp.write("\n")
         fp.write("phantom {}\n".format(plot_params.phantom_ID))
         fp.write('\n')
-        fp.write(',group SWS (m/s),  {:.2}% CI,  {:.2}% mean\n'.format(conf_int_frac, frac_error))
+        fp.write(',group SWS (m/s),  {:.3}% CI,  {:.3}% mean\n'.format((conf_int_frac-1)*100, frac_error*100))
         
         group_disp_mean = np.nanmean(self.filtered_disp_gSWSs)
         group_disp_std = np.nanstd(self.filtered_disp_gSWSs)
@@ -268,7 +268,7 @@ class QIBAOutput:
         
         fp.write("\n\n")
         
-        fp.write("frequency (Hz),phase velocity (m/s),  {:.2}% CI,  {:.2}% mean\n".format(conf_int_frac, frac_error))
+        fp.write("frequency (Hz),phase velocity (m/s),  {:.3}% CI,  {:.3}% mean\n".format((conf_int_frac-1)*100, frac_error*100))
         
         phase_vel_means = np.nanmean(self.filtered_phVels, axis=0)
         phase_vel_stds = np.nanstd(self.filtered_phVels, axis=0)
