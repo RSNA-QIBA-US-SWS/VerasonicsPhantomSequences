@@ -109,7 +109,8 @@ def calc_particle_displacement_using_kasai(IQData: np.array, num_refs: int, kern
 
         pretrack_disp_est = -1 * calc_particle_displacement_using_kasai(additional_reference_frames, 1,
                                                                         kernel_size_pixels, c_mps,
-                                                                        track_freq_Mhz, 'fixed', kasai_axis)
+                                                                        track_freq_Mhz, 'fixed', kasai_axis,
+                                                                        big_time_axis)
 
         # Re-reversing the frames to put them back in the correct order
         pretrack_disp_est = np.flip(pretrack_disp_est, axis=big_time_axis)
