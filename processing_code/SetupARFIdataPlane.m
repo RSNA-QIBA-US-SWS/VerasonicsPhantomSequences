@@ -115,23 +115,16 @@ end
 function newplane=RollOffPlaneTimeEdges(plane,tms,rolloffTimeMS)
 
     [nlats,ntimes]=size(plane);
-    tmask=ones(1,ntimes);
-    twidth = rolloffTimeMS/mean(diff(tms));
 
-    for itime=1:ntimes
-        if itime < (twidth+1)
-            tmask(itime) = 0.5*(1-cos( (itime-1)/twidth*pi ));
-        end
-        if itime > ntimes-twidth
-            tmask(itime) = 0.5*(1+cos((itime-(ntimes-twidth))/twidth*pi));
-        end
-    end
+    total_time = tms(end) - tms(1);
+    tukey_roll_off_width = 2*rolloffTimeMS;
+    tukey_alpha = tukey_roll_off_width/total_time;
 
-    mask=ones(size(plane));
-    for ilat=1:nlats
-        mask(ilat,:)=mask(ilat,:).*tmask;
-    end
-    newplane = plane.*mask;
+    wind = tukeywin(ntimes, tukey_alpha);
+
+    wind = reshape(wind, [1, ntimes]);
+
+    newplane = plane.*wind;
 end
 
 %==========================================================================
