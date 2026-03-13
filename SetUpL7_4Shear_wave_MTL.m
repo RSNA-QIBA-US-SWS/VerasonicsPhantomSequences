@@ -1,22 +1,23 @@
 clear all
 global filedir outdir
-scriptName='SETUPL7_4Shear_wave_MTL';
+scriptName='SETUPL7_4Shear_wave_MTL_ss1294';
 
 %% Commonly changing variables
 
-filedir = '/home/verasonics/cloud/Vantage-4.2.0-2001220500'; % CHANGE ME to point to the install of the Vantage Software
+filedir = 'path/to/verasonics/directory'; % CHANGE ME to point to the install of the Vantage Software
 cd(filedir);
-sourcedir = '/home/verasonics/repos/VerasonicsPhantomSequences'; % CHANGE ME to point to the local download of this repository
+sourcedir = 'path/to/source/directory'; % CHANGE ME to point to the local download of this repository
 addpath(genpath(sourcedir));
-outdir = pwd; % CHANGE ME if you would like the output files to be stored somewhere that is not the Vantage Software Folder
+outdir = 'path/to/save/directory'; % CHANGE ME if you would like the output files to be stored somewhere that is not the Vantage Software Folder
+if ~exist(outdir,'dir');mkdir(outdir);end
 
 saveChannelData = 0;
 saveIQData = 1;
 push_cycle  = 900;
-push_focus = 25; % in mm
+push_focus = 15; % in mm
 push_Fnum = 1.5;
 npush = 1;
-ne = 50;
+ne = 100;
 nrefs = 5;
 pushAngleDegree = 0;
 %% Define basic parameters
@@ -39,8 +40,8 @@ P.endDepth = 240;   % This should preferrably be a multiple of 128 samples.
 Trans.name = 'L7-4';
 Trans.units = 'wavelengths'; % Explicit declaration avoids warning message when selected by default
 Trans = computeTrans(Trans);  % C5-2 transducer is 'known' transducer so we can use computeTrans.
-Trans.maxHighVoltage = 76;  % set maximum high voltage limit for pulser supply.
-TPC(5).maxHighVoltage = 76;
+Trans.maxHighVoltage = 50;  % set maximum high voltage limit for pulser supply.
+TPC(5).maxHighVoltage = 50;
 w = Resource.Parameters.speedOfSound/Trans.frequency/1000; % wavelength in mm
 pushElementNum = round((push_focus/push_Fnum)/(Trans.spacing*w)/2)*2;
 
@@ -63,9 +64,10 @@ PData(1).Region = computeRegions(PData(1));
 
 PData(2).PDelta = [Trans.spacing/2, 0, 0.25];
 PData(2).Size(1) = ceil((P.endDepth-P.startDepth)/PData(2).PDelta(3));
-PData(2).Size(2) = ceil(((Trans.numelements-pushElementNum)*Trans.spacing)/PData(2).PDelta(1))+1;
-PData(2).Size(3) = 1;      % single image page
-PData(2).Origin = [-Trans.spacing*(Trans.numelements-pushElementNum)/2,0,P.startDepth] ; % x,y,z of upper lft crnr
+PData(2).Size(2) = ceil((Trans.numelements*Trans.spacing)/PData(2).PDelta(1)); % Copied from Bmode
+PData(2).Size(3) = 1; % single image page
+% PData(2).Origin = [-Trans.spacing*(Trans.numelements-pushElementNum)/2,0,P.startDepth] ; % x,y,z of upper lft crnr
+PData(2).Origin = [-PData(2).Size(2)/4,0,P.startDepth] ; % x,y,z of upper lft crnr
 PData(2).Region = computeRegions(PData(2));
 
 %% Specify resource buffers
