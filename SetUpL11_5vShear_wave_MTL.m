@@ -2,31 +2,36 @@ clear all
 global filedir outdir
 scriptName='SETUPL11_5vShear_wave_MTL';
 
-%% Commonly changing variables
+%% filepath inputs
 
-filedir = '/home/verasonics/cloud/Vantage-4.9.6-2502061500'; % CHANGE ME to point to the install of the Vantage Software
-cd(filedir);
-sourcedir = '/home/verasonics/repos/VerasonicsPhantomSequences'; % CHANGE ME to point to the local download of this repository
+filedir = 'path/to/verasonics/directory/'; % CHANGE ME to point to the install of the Vantage Software
+sourcedir = 'path/to/source/directory/'; % CHANGE ME to point to the local download of this repository
 addpath(genpath(sourcedir));
-outdir = pwd; % CHANGE ME if you would like the output files to be stored somewhere that is not the Vantage Software Folder
 
-saveChannelData = 0;
-saveIQData = 1;
-push_cycle  = 900;
-push_focus = 18; % in mm
-push_Fnum = 1.5;
-npush = 1;
-ne = 80;
-nrefs = 5;
-pushAngleDegree = 0;
+outdir = 'path/to/save/directory/'; % CHANGE ME to where you if you would like the output files to be stored somewhere, can also be pwd for current directory
+if ~exist(outdir,'dir');mkdir(outdir);end
+
+cd(filedir);
+
+%% acquisition parameter inputs
+
+push_cycle      = 0;    % # push cycles
+push_focus      = 18;   % focal depth of ARF (mm)
+push_Fnum       = 1.5;  % focal aperture
+npush           = 1;    % number of pushes
+ne              = 100;  % number of tracking ensembles after the push
+nrefs           = 5;    % number of reference frames before the push
+pushAngleDegree = 0;    % degrees
+c               = 1540; % speed of sound (m/s)
+
 %% Define basic parameters
 m = 128; % Bmode lines
 getPower = 0; % DO NOT delete, used by save_swei_data
 
-Resource.Parameters.connector = 2;
+Resource.Parameters.connector = 1;
 Resource.Parameters.numTransmit = 128;  % number of transmit channels.
 Resource.Parameters.numRcvChannels = 128;  % number of receive channels.
-Resource.Parameters.speedOfSound = 1540;
+Resource.Parameters.speedOfSound = c;
 Resource.Parameters.simulateMode = 0;
 Resource.Parameters.verbose = 2;
 Resource.Parameters.initializeOnly = 0;
@@ -38,7 +43,7 @@ P.endDepth = 180;   % This should preferrably be a multiple of 128 samples.
 %% Specify Trans structure array.
 Trans.name = 'L11-5v';
 Trans.units = 'wavelengths'; % Explicit declaration avoids warning message when selected by default
-Trans = computeTrans(Trans);  % C5-2 transducer is 'known' transducer so we can use computeTrans.
+Trans = computeTrans(Trans);  % L11-5V transducer is 'known' transducer so we can use computeTrans.
 Trans.maxHighVoltage = 76;  % set maximum high voltage limit for pulser supply.
 TPC(5).maxHighVoltage = 76;
 w = Resource.Parameters.speedOfSound/Trans.frequency/1000; % wavelength in mm
@@ -56,16 +61,17 @@ PData(1).Region = repmat(struct('Shape',struct( ...
                     'width',Trans.spacing,...
                     'height',P.endDepth-P.startDepth)),1,128);
 % - set position of regions to correspond to beam spacing.
-for i = 1:128
-    PData(1).Region(i).Shape.Position(1) = (-63.5 + (i-1))*Trans.spacing;
+for i = 1:(Trans.numelements)
+    PData(1).Region(i).Shape.Position(1) = (-((Trans.numelements-1)/2) + (i-1))*Trans.spacing;
 end
-PData(1).Region = computeRegions(PData(1));
 
+PData(1).Region = computeRegions(PData(1));
 PData(2).PDelta = [Trans.spacing/2, 0, 0.25];
 PData(2).Size(1) = ceil((P.endDepth-P.startDepth)/PData(2).PDelta(3));
-PData(2).Size(2) = ceil(((Trans.numelements-pushElementNum)*Trans.spacing)/PData(2).PDelta(1))+1;
+PData(2).Size(2) = ceil((Trans.numelements*Trans.spacing)/PData(2).PDelta(1)); % Copied from Bmode
 PData(2).Size(3) = 1;      % single image page
-PData(2).Origin = [-Trans.spacing*(Trans.numelements-pushElementNum)/2,0,P.startDepth] ; % x,y,z of upper lft crnr
+% PData(2).Origin = [-Trans.spacing*(Trans.numelements-pushElementNum)/2,0,P.startDepth] ; % x,y,z of upper lft crnr
+PData(2).Origin = [-PData(2).Size(2)/4,0,P.startDepth] ; % x,y,z of upper lft crnr
 PData(2).Region = computeRegions(PData(2));
 
 %% Specify resource buffers
@@ -341,7 +347,7 @@ SeqControl(7).condition = 'immediate';
 SeqControl(7).argument = 5;
 % - time between tracks
 SeqControl(8).command = 'timeToNextAcq';
-warning("Changed PRF to 10k");
+warning("Changed PRF to 10kHz");
 SeqControl(8).argument = 100; % 
 % - Trigger out
 SeqControl(9).command = 'triggerOut';
@@ -517,16 +523,17 @@ for i = 1:npush
     
 end
 
-if saveChannelData
-    Event(n).info = 'save channel data';
-    Event(n).tx = 0;
-    Event(n).rcv = 0;
-    Event(n).recon = 0;
-    Event(n).process = 2;
-    Event(n).seqControl = 2;
-    n = n+1;
-end
+% if saveChannelData
+%     Event(n).info = 'save channel data';
+%     Event(n).tx = 0;
+%     Event(n).rcv = 0;
+%     Event(n).recon = 0;
+%     Event(n).process = 2;
+%     Event(n).seqControl = 2;
+%     n = n+1;
+% end
 
+saveIQData = 1;
 if saveIQData
     Event(n).info = 'save IQ data';
     Event(n).tx = 0;

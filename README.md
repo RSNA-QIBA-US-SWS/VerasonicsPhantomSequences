@@ -19,9 +19,9 @@ background for these specific sequences, can be found in this
 [manuscript](https://doi.org/10.1109/TUFFC.2016.2614944).  Please cite this work
 if you publish results acquired with these sequences.
 
-## Processing Code
+## Processing Code - MATLAB
 
-All of the processing code is located in the `processing_code/` directory.
+All of the processing code is located in the `MATLAB_processing/` directory.
 `AnalyzeAllAcquisitions.m` is the main script that will process all of the
 Verasonics-generated data in the `CWD`.
 
@@ -29,6 +29,18 @@ A summary of how these processed data can be interpreted in elastic and
 viscoelastic media can be found in this
 [manuscript](https://doi.org/10.1002/jum.15609).  Please cite this work if you
 publish an analysis that uses these methods.
+
+## Processing Code - Python
+
+All of the processing code is located in the `python_processing/` directory.
+`step_through_processing.ipynb` is the main script that will process all of the
+Verasonics-generated data, using an input path for the dataset (found in the `save_directory` variable).
+
+In order to use the Python QIBA processing code, please install necessary packages using:
+`pip install -r requirements.txt`
+
+If installing all packages within a conda environment is preferable, please create and install conda environment using the `environment.yml` file, then activate the environment which was created:
+`conda env create -f environment.yml`
 
 ## Test Data
 
