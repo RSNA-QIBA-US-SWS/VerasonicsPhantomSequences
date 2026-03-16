@@ -3,26 +3,27 @@ global filedir outdir
 scriptName='SETUPL11_5vShear_wave_MTL';
 
 %% filepath inputs
-filedir = '/home/verasonics/Documents/VantageNXT-2.1.0-p1/'; % CHANGE ME to point to the install of the Vantage Software
-sourcedir = '/home/ss1294/repos/QIBA_repository_forked/'; % CHANGE ME to point to the local download of this repository
+
+filedir = 'path/to/verasonics/directory/'; % CHANGE ME to point to the install of the Vantage Software
+sourcedir = 'path/to/source/directory/'; % CHANGE ME to point to the local download of this repository
 addpath(genpath(sourcedir));
 
-outdir = '/data/ss1294/qiba_test/l115v/'; % CHANGE ME to where you if you would like the output files to be stored somewhere, can also be pwd for current directory
+outdir = 'path/to/save/directory/'; % CHANGE ME to where you if you would like the output files to be stored somewhere, can also be pwd for current directory
 if ~exist(outdir,'dir');mkdir(outdir);end
 
 cd(filedir);
 
-%%
+%% acquisition parameter inputs
 
-saveChannelData = 0;
-saveIQData = 1;
-push_cycle  = 0;
-push_focus = 18; % in mm
-push_Fnum = 1.5;
-npush = 1;
-ne = 80;
-nrefs = 5;
-pushAngleDegree = 0;
+push_cycle      = 0;    % # push cycles
+push_focus      = 18;   % focal depth of ARF (mm)
+push_Fnum       = 1.5;  % focal aperture
+npush           = 1;    % number of pushes
+ne              = 100;  % number of tracking ensembles after the push
+nrefs           = 5;    % number of reference frames before the push
+pushAngleDegree = 0;    % degrees
+c               = 1540; % speed of sound (m/s)
+
 %% Define basic parameters
 m = 128; % Bmode lines
 getPower = 0; % DO NOT delete, used by save_swei_data
@@ -30,7 +31,7 @@ getPower = 0; % DO NOT delete, used by save_swei_data
 Resource.Parameters.connector = 1;
 Resource.Parameters.numTransmit = 128;  % number of transmit channels.
 Resource.Parameters.numRcvChannels = 128;  % number of receive channels.
-Resource.Parameters.speedOfSound = 1540;
+Resource.Parameters.speedOfSound = c;
 Resource.Parameters.simulateMode = 0;
 Resource.Parameters.verbose = 2;
 Resource.Parameters.initializeOnly = 0;
@@ -520,16 +521,17 @@ for i = 1:npush
     
 end
 
-if saveChannelData
-    Event(n).info = 'save channel data';
-    Event(n).tx = 0;
-    Event(n).rcv = 0;
-    Event(n).recon = 0;
-    Event(n).process = 2;
-    Event(n).seqControl = 2;
-    n = n+1;
-end
+% if saveChannelData
+%     Event(n).info = 'save channel data';
+%     Event(n).tx = 0;
+%     Event(n).rcv = 0;
+%     Event(n).recon = 0;
+%     Event(n).process = 2;
+%     Event(n).seqControl = 2;
+%     n = n+1;
+% end
 
+saveIQData = 1;
 if saveIQData
     Event(n).info = 'save IQ data';
     Event(n).tx = 0;

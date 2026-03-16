@@ -24,7 +24,6 @@ function AnalyzeARFIdata(filestamp,par)
         vellatmm = latmm;
 
         TTPdisp = [];TTPvel = [];
-        
         if ismember(lower(par.swsest),{'ttp',''})
             [TTPdisp,Vdisp] = FindTTPandGSWS(dispPlane,tms,   latmm);       % get gSWSs using TTP
             [TTPvel, Vvel]  = FindTTPandGSWS(velPlane, veltms,vellatmm);
@@ -41,20 +40,22 @@ function AnalyzeARFIdata(filestamp,par)
         phVel = Construct2DFTandCalcPhVel(wtVelPlane,t,lat,freqsToAnalyzeHz);
 
         % plotting function
-        if par.plotfig
+        if par.plot_int_fig
             figure(99);
             subplot(1,2,1)
             imagesc(tms,latmm,dispPlane);hold on;
             scatter(TTPdisp, latmm, 'filled', 'k');
             xlabel('Time (ms)');ylabel('Lateral (mm)');title('Particle Displacement');
             ylim([min(latmm) max(latmm)]);
+            axis image
     
             subplot(1,2,2)
             imagesc(tms,latmm,velPlane);hold on;
             scatter(TTPvel, latmm, 'filled', 'k');
             xlabel('Time (ms)');ylabel('Lateral (mm)');title('Particle velocity');
             ylim([min(latmm) max(latmm)]);
-            pause(0.5)
+            axis image
+            pause(0.2)
         end
 
         saveFile = [par.analysisDir '/' filestamp '_FL' num2str(fliplat) '_phVel_gSWS_data.mat'];
@@ -74,40 +75,4 @@ function [ttp,gSWS] = FindTTPandGSWS(plane,tms,latmm)
 
     p = polyfit(latmm,ttp,1);
     gSWS = 1/p(1);
-end
-
-% =========================================================================
-
-function [latsums]=make_latsum(plane,itminstart,itmaxstart,itmaxend)
-
-[nlats,ntimes]=size(plane);
-
-interpIndx=zeros(ntimes-1,nlats);         % get indices and fractions for
-interpFrac=zeros(ntimes-1,nlats);         % interpolation at lat positions
-
-ilats=1:nlats;
-
-for idiff=1:ntimes-1   %run across every time step
-    tvals=(idiff-1)/(length(ilats)-1)*(ilats-ilats(1));  % 'ideal' time steps across each lat to connect the way we'd want to
-    interpIndx(idiff,ilats)=floor(tvals);
-    interpFrac(idiff,ilats)=1-(tvals-interpIndx(idiff,ilats));
-end
-
-latsums = nan(ntimes-1,ntimes-1);
-maxistart=min(itmaxstart,ntimes-1); %use given index, or last index available if smaller
-maxiend=min(itmaxend,ntimes-1);
-startTimeIndex=itminstart;
-endoffset = 0;
-
-for istart=startTimeIndex:maxistart
-    iendvector=istart+endoffset:maxiend;  
-    idiff=iendvector-istart+1;            % +1 for matlab numbering  Find difference between beginning and end time steps
-    
-    idx0vals=interpIndx(idiff,ilats)+istart;  %Index zero vals
-    fracs=interpFrac(idiff,ilats);
-    
-    indices1=ones(size(iendvector))'*ilats + (idx0vals-1)*size(plane,1); %Each 1x28 matrices of indexes-- drawing the 'line'
-    indices2=ones(size(iendvector))'*ilats+ (idx0vals)*size(plane,1); % (id0vals+1)-1
-    latsums(istart,iendvector) = sum(plane(indices1).*fracs+plane(indices2).*(1-fracs),2,'omitnan')';  % sum over lat pos,weighting the data points on either side of the 'line' appropriately
-end
 end

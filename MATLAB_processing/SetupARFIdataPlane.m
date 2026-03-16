@@ -28,8 +28,7 @@ function [dispPlane,tms,latmm] = SetupARFIdataPlane(arfidata,axialmm,latmm,tms,p
 
     [dispPlane,tms,latmm] = RemoveAndFixReverb(dispPlane,tms,latmm,nStepsToRemove);
 
-%     dispPlane = LowPassFilterInTime2D(dispPlane,tms,LPFcutoffKHz);
-    dispPlane = HighPassFilterInTime2D(dispPlane,tms,0.02);
+    dispPlane = LowPassFilterInTime2D(dispPlane,tms,LPFcutoffKHz);
     
     tIdx = find(tms<=maxTimeMS);        % truncate to maxTime
     dispPlane = dispPlane(:,tIdx);

@@ -3,20 +3,19 @@ global filedir outdir
 scriptName='SETUPL7_4Shear_wave_MTL';
 
 %% filepath inputs
-filedir = '/home/verasonics/Documents/VantageNXT-2.1.0-p1/'; % CHANGE ME to point to the install of the Vantage Software
-sourcedir = '/home/ss1294/repos/QIBA_repository_forked/'; % CHANGE ME to point to the local download of this repository
+
+filedir = 'path/to/verasonics/directory/'; % CHANGE ME to point to the install of the Vantage Software
+sourcedir = 'path/to/source/directory/'; % CHANGE ME to point to the local download of this repository
 addpath(genpath(sourcedir));
 
-outdir = '/data/ss1294/qiba_test/l115v/'; % CHANGE ME to where you if you would like the output files to be stored somewhere, can also be pwd for current directory
+outdir = 'path/to/save/directory/'; % CHANGE ME to where you if you would like the output files to be stored somewhere, can also be pwd for current directory
 if ~exist(outdir,'dir');mkdir(outdir);end
 
 cd(filedir);
 
 %% acquisition parameter inputs
 
-saveChannelData = 0;    % boolean flag
-saveIQData      = 1;    % boolean flag
-push_cycle      = 0;  % # push cycles
+push_cycle      = 0;    % # push cycles
 push_focus      = 15;   % focal depth of ARF (mm)
 push_Fnum       = 1.5;  % focal aperture
 npush           = 1;    % number of pushes
@@ -521,16 +520,17 @@ for i = 1:npush
     
 end
 
-if saveChannelData
-    Event(n).info = 'save channel data';
-    Event(n).tx = 0;
-    Event(n).rcv = 0;
-    Event(n).recon = 0;
-    Event(n).process = 2;
-    Event(n).seqControl = 2;
-    n = n+1;
-end
+% if saveChannelData
+%     Event(n).info = 'save channel data';
+%     Event(n).tx = 0;
+%     Event(n).rcv = 0;
+%     Event(n).recon = 0;
+%     Event(n).process = 2;
+%     Event(n).seqControl = 2;
+%     n = n+1;
+% end
 
+saveIQdata = 1;
 if saveIQData
     Event(n).info = 'save IQ data';
     Event(n).tx = 0;
@@ -613,7 +613,6 @@ frameRateFactor = 2;
 save(['./MatFiles/' scriptName '.mat']);
 display(['filename =''' scriptName '.mat'';VSX'])
 % eval(['filename =''' scriptName ''';VSX'])
-
 
 return
 

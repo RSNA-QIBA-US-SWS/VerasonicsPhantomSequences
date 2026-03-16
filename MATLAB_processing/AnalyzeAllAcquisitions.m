@@ -24,9 +24,10 @@ function AnalyzeAllAcquisitions
     %   Construct2DFTandCalcPhVel
     %   MakePlotAndSaveCSVfile
 
-    dataDir = '/data/ss1294/qiba_test/';    % CHANGE ME to a directory string or "pwd" for the current directory
+    !dataDir = 'data_directory';    % CHANGE ME to a directory string or "pwd" for the current directory
+    cd(dataDir)
 
-       % analysis and save directories
+       % analysis directory definition
 
     par.analysisDir      = dataDir;         % directory of verasonics data, and output plot save directory
 
@@ -42,8 +43,8 @@ function AnalyzeAllAcquisitions
     par.LPFcutoffKHz     = 1;           % low-pass filter cutoff frequency (kHz)
     par.desiredPRFkHz    = 20;          % desired PRF (kHz) after upsampling in time 
     par.freqsToAnalyzeHz = 20:10:800;   % frequencies (Hz) for phase velocity measurements
-    par.plotfig          = 1;
-    par.swsest          = "ttp"
+    par.plot_int_fig     = 0;           % flag for plotting intermediate output figures (shearwave propagation animation and spacetime plot)
+    par.swsest           = 'ttp';
 
         % parameters for plotting and saving output
     
@@ -66,7 +67,6 @@ function AnalyzeAllAcquisitions
     paramFiles = dir([dataDir '/*_parameters.mat']);    % get parameter files
 
     for i = 1:length(paramFiles)    % for each file, get filestamp and compute displacements
-
         disp(['Processing ' num2str(i) ' of ' num2str(length(paramFiles))])     % comment to suppress output
         filestamp = paramFiles(i).name(1:14);
         par.filestamp = filestamp;

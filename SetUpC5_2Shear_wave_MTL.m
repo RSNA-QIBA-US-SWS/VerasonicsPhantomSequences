@@ -2,7 +2,8 @@ clear all
 global filedir outdir
 scriptName='SETUPC5_2SHEAR_WAVE_MTL';
 
-%% Commonly changing variables
+%% filepath inputs
+
 filedir = 'path/to/verasonics/directory/'; % CHANGE ME to point to the install of the Vantage Software
 sourcedir = 'path/to/source/directory/'; % CHANGE ME to point to the local download of this repository
 addpath(genpath(sourcedir));
@@ -12,26 +13,29 @@ if ~exist(outdir,'dir');mkdir(outdir);end
 
 cd(filedir);
 
-push_focus = 50; %mm
-push_Fnum = 1.5; % 
-pushCycle  = 900;
-ne = 205;
-nrefs = 5;
-pushAngleDegree = 0;
+%% acquisition parameter inputs
+
+push_focus      = 50;   % focal depth of ARF (mm)
+push_Fnum       = 1.5;  % focal aperture 
+pushCycle       = 900;  % # push cycles
+ne              = 205;  % number of tracking ensembles after the push
+nrefs           = 5;    % number of reference frames before the push
+pushAngleDegree = 0;    % degrees
+c               = 1540; % speed of sound (m/s)
 
 %% Define basic parameters
 m = 64; % Bmode lines
 bmode_focus = 50;
 bmode_Fnum = 2;
 
-getPower = 0; % DO NOT delete, used by save_swei_data %----------------------%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+getPower = 0; % DO NOT delete, used by save_swei_data
 saveChannelData = 0;
 saveIQData = 1;
 
 Resource.Parameters.connector = 1;
 Resource.Parameters.numTransmit = 128;  % number of transmit channels.
 Resource.Parameters.numRcvChannels = 128;  % number of receive channels.
-Resource.Parameters.speedOfSound = 1540;
+Resource.Parameters.speedOfSound = c;
 Resource.Parameters.simulateMode = 0;
 Resource.Parameters.verbose = 2;
 Resource.Parameters.initializeOnly = 0;
@@ -413,7 +417,7 @@ Event(n).process = 0;
 Event(n).seqControl = 6;
 n = n+1;
 
-lastBmodeEvent = n
+lastBmodeEvent = n;
 
 % Start of ARFI Events!
 % Switch to TPC profile 5 (high power) and allow time for charging ext. cap.
@@ -524,13 +528,16 @@ n = n+1;
 %     n = n+1;
 % end
 
-Event(n).info = 'save IQ data';
-Event(n).tx = 0;
-Event(n).rcv = 0;
-Event(n).recon = 0;
-Event(n).process = 3;
-Event(n).seqControl = 2;
-n = n+1;
+saveIQdata = 1;
+if saveIQData
+    Event(n).info = 'save IQ data';
+    Event(n).tx = 0;
+    Event(n).rcv = 0;
+    Event(n).recon = 0;
+    Event(n).process = 3;
+    Event(n).seqControl = 2;
+    n = n+1;
+end
 
 Event(n).info = 'Back to Matlab';
 Event(n).tx = 0;         % no transmit
