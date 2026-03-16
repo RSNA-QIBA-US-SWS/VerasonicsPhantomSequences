@@ -64,8 +64,8 @@ PData(1).Region = repmat(struct('Shape',struct( ...
 for i = 1:(Trans.numelements)
     PData(1).Region(i).Shape.Position(1) = (-((Trans.numelements-1)/2) + (i-1))*Trans.spacing;
 end
-PData(1).Region = computeRegions(PData(1));
 
+PData(1).Region = computeRegions(PData(1));
 PData(2).PDelta = [Trans.spacing/2, 0, 0.25];
 PData(2).Size(1) = ceil((P.endDepth-P.startDepth)/PData(2).PDelta(3));
 PData(2).Size(2) = ceil((Trans.numelements*Trans.spacing)/PData(2).PDelta(1)); % Copied from Bmode

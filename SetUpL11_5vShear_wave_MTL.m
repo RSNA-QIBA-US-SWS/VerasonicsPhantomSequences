@@ -61,15 +61,17 @@ PData(1).Region = repmat(struct('Shape',struct( ...
                     'width',Trans.spacing,...
                     'height',P.endDepth-P.startDepth)),1,128);
 % - set position of regions to correspond to beam spacing.
-for i = 1:128
-    PData(1).Region(i).Shape.Position(1) = (-63.5 + (i-1))*Trans.spacing;
+for i = 1:(Trans.numelements)
+    PData(1).Region(i).Shape.Position(1) = (-((Trans.numelements-1)/2) + (i-1))*Trans.spacing;
 end
+
 PData(1).Region = computeRegions(PData(1));
 PData(2).PDelta = [Trans.spacing/2, 0, 0.25];
 PData(2).Size(1) = ceil((P.endDepth-P.startDepth)/PData(2).PDelta(3));
-PData(2).Size(2) = ceil(((Trans.numelements-pushElementNum)*Trans.spacing)/PData(2).PDelta(1))+1; % uses 
+PData(2).Size(2) = ceil((Trans.numelements*Trans.spacing)/PData(2).PDelta(1)); % Copied from Bmode
 PData(2).Size(3) = 1;      % single image page
-PData(2).Origin = [-Trans.spacing*(Trans.numelements-pushElementNum)/2,0,P.startDepth] ; % x,y,z of upper lft crnr
+% PData(2).Origin = [-Trans.spacing*(Trans.numelements-pushElementNum)/2,0,P.startDepth] ; % x,y,z of upper lft crnr
+PData(2).Origin = [-PData(2).Size(2)/4,0,P.startDepth] ; % x,y,z of upper lft crnr
 PData(2).Region = computeRegions(PData(2));
 
 %% Specify resource buffers
