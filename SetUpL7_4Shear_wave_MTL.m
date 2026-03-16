@@ -1,15 +1,16 @@
 clear all
 global filedir outdir
-scriptName='SETUPL7_4Shear_wave_MTL_ss1294';
+scriptName='SETUPL7_4Shear_wave_MTL';
 
 %% Commonly changing variables
-
-filedir = 'path/to/verasonics/directory'; % CHANGE ME to point to the install of the Vantage Software
-cd(filedir);
-sourcedir = 'path/to/source/directory'; % CHANGE ME to point to the local download of this repository
+filedir = 'path/to/verasonics/directory/'; % CHANGE ME to point to the install of the Vantage Software
+sourcedir = 'path/to/source/directory/'; % CHANGE ME to point to the local download of this repository
 addpath(genpath(sourcedir));
-outdir = 'path/to/save/directory'; % CHANGE ME if you would like the output files to be stored somewhere that is not the Vantage Software Folder
+
+outdir = 'path/to/save/directory/'; % CHANGE ME to where you if you would like the output files to be stored somewhere, can also be pwd for current directory
 if ~exist(outdir,'dir');mkdir(outdir);end
+
+cd(filedir);
 
 saveChannelData = 0;
 saveIQData = 1;
@@ -39,7 +40,7 @@ P.endDepth = 240;   % This should preferrably be a multiple of 128 samples.
 %% Specify Trans structure array.
 Trans.name = 'L7-4';
 Trans.units = 'wavelengths'; % Explicit declaration avoids warning message when selected by default
-Trans = computeTrans(Trans);  % C5-2 transducer is 'known' transducer so we can use computeTrans.
+Trans = computeTrans(Trans);  % L7-4 transducer is 'known' transducer so we can use computeTrans.
 Trans.maxHighVoltage = 50;  % set maximum high voltage limit for pulser supply.
 TPC(5).maxHighVoltage = 50;
 w = Resource.Parameters.speedOfSound/Trans.frequency/1000; % wavelength in mm

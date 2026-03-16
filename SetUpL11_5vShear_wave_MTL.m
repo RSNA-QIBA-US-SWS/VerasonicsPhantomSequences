@@ -3,12 +3,14 @@ global filedir outdir
 scriptName='SETUPL11_5vShear_wave_MTL';
 
 %% Commonly changing variables
-
-filedir = '/home/verasonics/cloud/Vantage-4.9.6-2502061500'; % CHANGE ME to point to the install of the Vantage Software
-cd(filedir);
-sourcedir = '/home/verasonics/repos/VerasonicsPhantomSequences'; % CHANGE ME to point to the local download of this repository
+filedir = 'path/to/verasonics/directory/'; % CHANGE ME to point to the install of the Vantage Software
+sourcedir = 'path/to/source/directory/'; % CHANGE ME to point to the local download of this repository
 addpath(genpath(sourcedir));
-outdir = pwd; % CHANGE ME if you would like the output files to be stored somewhere that is not the Vantage Software Folder
+
+outdir = 'path/to/save/directory/'; % CHANGE ME to where you if you would like the output files to be stored somewhere, can also be pwd for current directory
+if ~exist(outdir,'dir');mkdir(outdir);end
+
+cd(filedir);
 
 saveChannelData = 0;
 saveIQData = 1;
@@ -38,7 +40,7 @@ P.endDepth = 180;   % This should preferrably be a multiple of 128 samples.
 %% Specify Trans structure array.
 Trans.name = 'L11-5v';
 Trans.units = 'wavelengths'; % Explicit declaration avoids warning message when selected by default
-Trans = computeTrans(Trans);  % C5-2 transducer is 'known' transducer so we can use computeTrans.
+Trans = computeTrans(Trans);  % L11-5V transducer is 'known' transducer so we can use computeTrans.
 Trans.maxHighVoltage = 76;  % set maximum high voltage limit for pulser supply.
 TPC(5).maxHighVoltage = 76;
 w = Resource.Parameters.speedOfSound/Trans.frequency/1000; % wavelength in mm
@@ -63,7 +65,7 @@ PData(1).Region = computeRegions(PData(1));
 
 PData(2).PDelta = [Trans.spacing/2, 0, 0.25];
 PData(2).Size(1) = ceil((P.endDepth-P.startDepth)/PData(2).PDelta(3));
-PData(2).Size(2) = ceil(((Trans.numelements-pushElementNum)*Trans.spacing)/PData(2).PDelta(1))+1;
+PData(2).Size(2) = ceil(((Trans.numelements-pushElementNum)*Trans.spacing)/PData(2).PDelta(1))+1; % uses 
 PData(2).Size(3) = 1;      % single image page
 PData(2).Origin = [-Trans.spacing*(Trans.numelements-pushElementNum)/2,0,P.startDepth] ; % x,y,z of upper lft crnr
 PData(2).Region = computeRegions(PData(2));
