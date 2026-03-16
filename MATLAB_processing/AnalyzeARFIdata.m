@@ -15,13 +15,6 @@ function AnalyzeARFIdata(filestamp,par)
     
     clear S
 
-    figure(2);
-    for i = 1:length(tmsARFIdata)
-        imagesc(tmsARFIdata, latmmARFIdata, squeeze(arfidata(:,:,i)))
-        xlabel('lat');ylabel('axial');
-        pause(0.1);
-    end
-
     for fliplat=0:1
 
         [dispPlane,tms,latmm] = SetupARFIdataPlane(arfidata,axialmm,latmmARFIdata,tmsARFIdata,pushFocusMM,fliplat,par);
@@ -32,7 +25,7 @@ function AnalyzeARFIdata(filestamp,par)
 
         TTPdisp = [];TTPvel = [];
         
-        if ismember(lower(par.swsest),{"ttp",""})
+        if ismember(lower(par.swsest),{'ttp',''})
             [TTPdisp,Vdisp] = FindTTPandGSWS(dispPlane,tms,   latmm);       % get gSWSs using TTP
             [TTPvel, Vvel]  = FindTTPandGSWS(velPlane, veltms,vellatmm);
         end
@@ -48,7 +41,7 @@ function AnalyzeARFIdata(filestamp,par)
         phVel = Construct2DFTandCalcPhVel(wtVelPlane,t,lat,freqsToAnalyzeHz);
 
         % plotting function
-        if false %par.plotfig
+        if par.plotfig
             figure(99);
             subplot(1,2,1)
             imagesc(tms,latmm,dispPlane);hold on;
@@ -65,7 +58,7 @@ function AnalyzeARFIdata(filestamp,par)
         end
 
         saveFile = [par.analysisDir '/' filestamp '_FL' num2str(fliplat) '_phVel_gSWS_data.mat'];
-        save(saveFile,'dispPlane','tms','latmm','velPlane','veltms','vellatmm','TTPdisp','TTPvel','radondisp','radonvel','Vdisp','Vvel','freqsToAnalyzeHz','phVel')
+        save(saveFile,'dispPlane','tms','latmm','velPlane','veltms','vellatmm','TTPdisp','TTPvel','Vdisp','Vvel','freqsToAnalyzeHz','phVel')
     end
 end
 

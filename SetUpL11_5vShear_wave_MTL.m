@@ -2,19 +2,21 @@ clear all
 global filedir outdir
 scriptName='SETUPL11_5vShear_wave_MTL';
 
-%% Commonly changing variables
-filedir = 'path/to/verasonics/directory/'; % CHANGE ME to point to the install of the Vantage Software
-sourcedir = 'path/to/source/directory/'; % CHANGE ME to point to the local download of this repository
+%% filepath inputs
+filedir = '/home/verasonics/Documents/VantageNXT-2.1.0-p1/'; % CHANGE ME to point to the install of the Vantage Software
+sourcedir = '/home/ss1294/repos/QIBA_repository_forked/'; % CHANGE ME to point to the local download of this repository
 addpath(genpath(sourcedir));
 
-outdir = 'path/to/save/directory/'; % CHANGE ME to where you if you would like the output files to be stored somewhere, can also be pwd for current directory
+outdir = '/data/ss1294/qiba_test/l115v/'; % CHANGE ME to where you if you would like the output files to be stored somewhere, can also be pwd for current directory
 if ~exist(outdir,'dir');mkdir(outdir);end
 
 cd(filedir);
 
+%%
+
 saveChannelData = 0;
 saveIQData = 1;
-push_cycle  = 900;
+push_cycle  = 0;
 push_focus = 18; % in mm
 push_Fnum = 1.5;
 npush = 1;
@@ -25,7 +27,7 @@ pushAngleDegree = 0;
 m = 128; % Bmode lines
 getPower = 0; % DO NOT delete, used by save_swei_data
 
-Resource.Parameters.connector = 2;
+Resource.Parameters.connector = 1;
 Resource.Parameters.numTransmit = 128;  % number of transmit channels.
 Resource.Parameters.numRcvChannels = 128;  % number of receive channels.
 Resource.Parameters.speedOfSound = 1540;
@@ -62,7 +64,6 @@ for i = 1:128
     PData(1).Region(i).Shape.Position(1) = (-63.5 + (i-1))*Trans.spacing;
 end
 PData(1).Region = computeRegions(PData(1));
-
 PData(2).PDelta = [Trans.spacing/2, 0, 0.25];
 PData(2).Size(1) = ceil((P.endDepth-P.startDepth)/PData(2).PDelta(3));
 PData(2).Size(2) = ceil(((Trans.numelements-pushElementNum)*Trans.spacing)/PData(2).PDelta(1))+1; % uses 
@@ -343,7 +344,7 @@ SeqControl(7).condition = 'immediate';
 SeqControl(7).argument = 5;
 % - time between tracks
 SeqControl(8).command = 'timeToNextAcq';
-warning("Changed PRF to 10k");
+warning("Changed PRF to 10kHz");
 SeqControl(8).argument = 100; % 
 % - Trigger out
 SeqControl(9).command = 'triggerOut';

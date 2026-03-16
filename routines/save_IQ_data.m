@@ -27,6 +27,7 @@ if ~saveChannelData
     Trans = evalin('base','Trans');
     TW = evalin('base','TW');
     TX = evalin('base','TX');
+    TPC = evalin('base', 'TPC');
     Receive = evalin('base','Receive');
     ne = evalin('base','ne');
     nrefs = evalin('base','nrefs');
@@ -37,9 +38,9 @@ if ~saveChannelData
     lastBmodeTransmit = evalin('base','lastBmodeTransmit');
     pushAngleDegree = evalin('base','pushAngleDegree');
     Resource = rmfield(Resource,'DisplayWindow');
-    Vvalue = 0;Vpush = 0;
+    Vvalue = 0;Vpush = TPC(5).hv;
     save(CHMAT,'Resource','PData','Trans','TW',...
-        'TX','Receive','ne','nrefs','T','T_idx',...
+        'TX','TPC','Receive','ne','nrefs','T','T_idx',...
         'lastBmodeEvent','lastBmodeReceive','lastBmodeTransmit',...
         'pushAngleDegree','Vvalue','Vpush','-v7.3')
 end

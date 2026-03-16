@@ -24,7 +24,7 @@ function AnalyzeAllAcquisitions
     %   Construct2DFTandCalcPhVel
     %   MakePlotAndSaveCSVfile
 
-    !dataDir = 'test_directory';    % CHANGE ME to a directory string or "pwd" for the current directory
+    dataDir = '/data/ss1294/qiba_test/';    % CHANGE ME to a directory string or "pwd" for the current directory
 
        % analysis and save directories
 
